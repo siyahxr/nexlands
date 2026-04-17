@@ -624,7 +624,10 @@
                         <div class="community-sidebar">
                             <div class="community-header">
                                 <h3 style="font-size: 15px; font-weight: 600;">Kanallar</h3>
-                                <button onclick="createCommunity()" style="background:var(--surface); border:1px solid var(--border); color:var(--t1); border-radius:8px; width:32px; height:32px; cursor:pointer;"><i class="fas fa-plus"></i></button>
+                                <div style="display: flex; gap: 8px;">
+                                    <button onclick="window.location.href='/topluluklar'" title="Keşfet" style="background:var(--surface); border:1px solid var(--border); color:var(--p); border-radius:8px; width:32px; height:32px; cursor:pointer;"><i class="fas fa-compass"></i></button>
+                                    <button onclick="createCommunity()" title="Yeni Kanal" style="background:var(--surface); border:1px solid var(--border); color:var(--t1); border-radius:8px; width:32px; height:32px; cursor:pointer;"><i class="fas fa-plus"></i></button>
+                                </div>
                             </div>
                             <div class="community-list" id="communityList">
                                 <!-- Channels will be loaded dynamically via JS -->

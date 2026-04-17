@@ -414,7 +414,7 @@
                 <ul class="nav-links">
                     <li><a href="#features">Özellikler</a></li>
                     <li><a href="#how">Nasıl Çalışır</a></li>
-                    <li><a href="#topluluklar">Topluluklar</a></li>
+                    <li><a href="/topluluklar">Topluluklar</a></li>
                     <li><a href="#cta">İletişim</a></li>
                 </ul>
                 <div class="nav-cta">
@@ -432,7 +432,7 @@
         <button class="mobile-close" id="closeBtn">✕</button>
         <a href="#features" onclick="closeMenu()">Özellikler</a>
         <a href="#how" onclick="closeMenu()">Nasıl Çalışır</a>
-        <a href="#topluluklar" onclick="closeMenu()">Topluluklar</a>
+        <a href="/topluluklar" onclick="closeMenu()">Topluluklar</a>
         <a href="#cta" onclick="closeMenu()">İletişim</a>
         <a href="#" class="btn btn-primary btn-lg" onclick="openAuthModal('register');closeMenu()">Hemen Başla</a>
     </div>
@@ -727,18 +727,20 @@
         }
         
         // Initializer
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('load', () => {
             loadHomeCommunities();
             // Start polling communities periodically
             setInterval(loadHomeCommunities, 10000); 
+
+            // Auto-open login if needed
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('login') === 'true') {
+                openAuthModal('login');
+            }
         });
 
         function goToCommunity(name) {
-            if (!localStorage.getItem('nexlandsUser') || localStorage.getItem('nexlandsUser') === 'undefined' || localStorage.getItem('nexlandsUser') === 'null') {
-                openAuthModal('login');
-                return;
-            }
-            window.open('/topluluklar/' + encodeURIComponent(name), '_blank');
+            window.location.href = '/topluluklar';
         }
         
         function runCounters() {

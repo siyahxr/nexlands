@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexlands — Toplulukları Keşfet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --red: #DC2626;
+            --red-light: #EF4444;
+            --p: #EF4444;
+            --bg: #050505;
+            --bg2: #0A0A0A;
+            --surface: rgba(255,255,255,0.02);
+            --border: rgba(239,68,68,0.1);
+            --t1: #FAFAFA;
+            --t2: #A1A1AA;
+            --t3: #71717A;
+            --grad-1: linear-gradient(135deg, #EF4444 0%, #F87171 100%);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--t1);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Grid Background */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(239,68,68,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(239,68,68,0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+        header { padding: 40px 0; border-bottom: 1px solid var(--border); background: rgba(5,5,5,0.8); backdrop-filter: blur(20px); sticky; top: 0; z-index: 100; }
+        .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+        .logo { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--t1); font-family:'Sora'; font-size:22px; font-weight:700; }
+        .logo-mark { width:36px; height:36px; background:var(--grad-1); border-radius:10px; display:grid; place-items:center; font-size:18px; }
+
+        .hero { padding: 80px 0 60px; text-align: center; }
+        .hero h1 { font-family: 'Sora'; font-size: clamp(32px, 5vw, 56px); margin-bottom: 16px; letter-spacing: -2px; }
+        .hero p { color: var(--t2); font-size: 18px; max-width: 600px; margin: 0 auto 40px; }
+
+        .search-container { max-width: 600px; margin: 0 auto 60px; position: relative; }
+        .search-input { width: 100%; padding: 18px 24px 18px 56px; background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; color: var(--t1); font-size: 16px; outline: none; transition: all 0.3s; }
+        .search-input:focus { border-color: var(--p); box-shadow: 0 0 30px rgba(239,68,68,0.1); }
+        .search-icon { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--t3); font-size: 18px; }
+
+        .discover-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; padding-bottom: 100px; }
+        
+        .discover-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; transition: all 0.4s cubic-bezier(0.23,1,0.32,1); position: relative; }
+        .discover-card:hover { transform: translateY(-8px); border-color: rgba(239,68,68,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        
+        .card-banner { height: 100px; position: relative; }
+        .card-icon-wrap { width: 80px; height: 80px; border-radius: 24px; background: var(--bg2); border: 6px solid var(--bg2); position: absolute; bottom: -40px; left: 24px; display: grid; place-items: center; }
+        .card-icon { width: 100%; height: 100%; border-radius: 16px; display: grid; place-items: center; font-size: 28px; color: #fff; }
+
+        .card-body { padding: 50px 24px 24px; }
+        .card-name { font-family: 'Sora'; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+        .card-stats { display: flex; align-items: center; gap: 12px; color: var(--t3); font-size: 13px; margin-bottom: 24px; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #10B981; }
+
+        .btn-join { width: 100%; padding: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; color: var(--t1); font-weight: 600; cursor: pointer; transition: all 0.3s; text-decoration: none; display: block; text-align: center; }
+        .discover-card:hover .btn-join { background: var(--grad-1); border-color: transparent; box-shadow: 0 8px 20px rgba(239,68,68,0.3); }
+
+        .loading-state { text-align: center; padding: 100px 0; color: var(--t3); font-size: 18px; grid-column: 1 / -1; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .discover-card { animation: fadeIn 0.6s ease forwards; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="nav-inner">
+                <a href="/" class="logo">
+                    <div class="logo-mark">✦</div>
+                    Nexlands
+                </a>
+                <a href="/dashboard" class="btn-join" style="width: auto; padding: 10px 20px; border-radius: 12px;">Panele Git</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Toplulukları <span style="background: var(--grad-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Keşfet</span></h1>
+            <p>Eğlenceli quiz seansları, yardımlaşma grupları ve ilgi alanlarına göre binlerce odayı keşfetmeye başla.</p>
+            
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Sunucu veya kategori ara..." id="searchInput">
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="discover-grid" id="discoverGrid">
+            <div class="loading-state">
+                <i class="fas fa-spinner fa-spin" style="font-size: 32px; margin-bottom: 16px;"></i>
+                <p>Topluluklar yükleniyor...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allChannels = [];
+
+        async function loadDiscover() {
+            try {
+                const res = await fetch('/api/channels');
+                const data = await res.json();
+                
+                if (data.success) {
+                    allChannels = data.channels;
+                    renderChannels(allChannels);
+                }
+            } catch (err) {
+                document.getElementById('discoverGrid').innerHTML = '<div class="loading-state">Yüklenirken bir hata oluştu.</div>';
+            }
+        }
+
+        function renderChannels(channels) {
+            const grid = document.getElementById('discoverGrid');
+            grid.innerHTML = '';
+
+            if (channels.length === 0) {
+                grid.innerHTML = '<div class="loading-state">Hiç topluluk bulunamadı.</div>';
+                return;
+            }
+
+            channels.forEach((ch, idx) => {
+                const memberCount = Math.floor(Math.random() * 2000) + 500;
+                const onlineCount = Math.floor(memberCount * 0.2);
+                const color = ch.color || '#F87171';
+                
+                const card = document.createElement('div');
+                card.className = 'discover-card';
+                card.style.animationDelay = (idx * 0.05) + 's';
+                
+                card.innerHTML = `
+                    <div class="card-banner" style="background: linear-gradient(180deg, ${color}60, transparent);"></div>
+                    <div class="card-icon-wrap">
+                        <div class="card-icon" style="background: ${color}; box-shadow: 0 8px 20px ${color}40;">
+                            <i class="fas ${ch.icon || 'fa-hashtag'}"></i>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-name">${ch.name}</div>
+                        <div class="card-stats">
+                            <span style="display:flex; align-items:center; gap:4px;"><span class="status-dot"></span> ${onlineCount} Çevrimiçi</span>
+                            <span>•</span>
+                            <span>${memberCount} Üye</span>
+                        </div>
+                        <button class="btn-join" onclick="joinChannel('${ch.name.replace(/'/g, "\\'")}')">Sunucuya Katıl</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function joinChannel(name) {
+            // Check if logged in
+            if (!localStorage.getItem('nexlandsUser')) {
+                window.location.href = '/?login=true';
+                return;
+            }
+            window.location.href = '/topluluklar/' + encodeURIComponent(name);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allChannels.filter(c => c.name.toLowerCase().includes(term));
+            renderChannels(filtered);
+        });
+
+        loadDiscover();
+    </script>
+</body>
+</html>
