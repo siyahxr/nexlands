@@ -15,8 +15,16 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   try {
     const { email, name, password } = await request.json();
     
-    if (!email || !name) {
-      return new Response(JSON.stringify({ error: 'Email and name required' }), {
+    // Basic validation
+    if (!email || !name || !password) {
+      return new Response(JSON.stringify({ error: 'All fields are required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    if (password.length < 6) {
+      return new Response(JSON.stringify({ error: 'Password must be at least 6 characters' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
@@ -33,7 +41,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     const user = {
       email,
       name,
-      password,
+      password, // Note: In production hashing is mandatory
       provider: 'email',
       createdAt: new Date().toISOString(),
       loginTime: new Date().toISOString()
@@ -41,7 +49,9 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     
     await env.KV.put('user:' + email, JSON.stringify(user));
     
-    const currentUsers = parseInt(await env.KV.get('stats:users') || '50000');
+    // Efficiently increment stats
+    const currentUsersRaw = await env.KV.get('stats:users');
+    const currentUsers = parseInt(currentUsersRaw || '50000');
     await env.KV.put('stats:users', String(currentUsers + 1));
 
     return new Response(JSON.stringify({

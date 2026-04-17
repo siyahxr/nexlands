@@ -3,54 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexlands — Öğrenmenin Yeni Yolu</title>
+    <title>Nexlands — Eğitimin Geleceği</title>
     <meta name="description" content="Nexlands ile quiz, hikaye ve sınıf oyunlarıyla öğrenmeyi eğlenceye dönüştür.">
+    <meta property="og:title" content="Nexlands — Eğitimin Geleceği">
+    <meta property="og:description" content="Öğrenmeyi maceraya dönüştüren yenilikçi oyunlaştırılmış eğitim platformu.">
+    <meta property="og:image" content="/assets/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <script>
+        // Check if user already logged in
+        const savedUser = localStorage.getItem('nexlandsUser');
+        if (savedUser && !window.location.pathname.includes('dashboard')) {
+            // Optional: Auto redirect to dashboard if already logged in
+            // window.location.href = '/dashboard';
+        }
+    </script>
     <style>
         :root {
+            /* Core Colors */
             --red: #DC2626;
             --red-light: #EF4444;
             --red-soft: #F87171;
-            --red-dark: #991B1B;
-            --maroon: #7F1D1D;
-            --burgundy: #4C0519;
-            --black: #0A0A0A;
-            --black2: #111111;
-            --black3: #1A0505;
             --p: #EF4444;
             --p2: #F87171;
-            --p3: #DC2626;
-            --rose: #881337;
+            
+            /* Backgrounds */
             --bg: #050505;
             --bg2: #0A0A0A;
             --bg3: #111111;
+            
+            /* Surface & UI */
             --surface: rgba(255,255,255,0.02);
             --surface-hover: rgba(255,255,255,0.04);
             --border: rgba(239,68,68,0.08);
             --border-accent: rgba(239,68,68,0.2);
             --border-strong: rgba(239,68,68,0.35);
+            
+            /* Typography */
             --t1: #FAFAFA;
             --t2: #A1A1AA;
             --t3: #71717A;
             --t4: #52525B;
+            
+            /* Gradients */
             --grad-1: linear-gradient(135deg, #EF4444 0%, #F87171 50%, #FDA4AF 100%);
-            --grad-hero: radial-gradient(ellipse 100% 80% at 50% 0%, rgba(239,68,68,0.1) 0%, transparent 60%);
+            --grad-glass: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
         }
 
         *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-        html { scroll-behavior:smooth; font-size:16px; }
+        html { scroll-behavior:smooth; font-size:16px; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg);
             color: var(--t1);
             overflow-x: hidden;
-            line-height: 1.7;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Subtle Grid Overlay */
         body::after {
             content: '';
             position: fixed;
@@ -62,82 +76,20 @@
             opacity: 0.5;
         }
 
-        h1,h2,h3,h4 { font-family: 'Sora', sans-serif; line-height: 1.15; }
-        .container { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+        h1,h2,h3,h4 { font-family: 'Sora', sans-serif; line-height: 1.1; font-weight: 700; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
 
-        .blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-        .blob { position: absolute; border-radius: 50%; filter: blur(120px); animation: drift 20s ease-in-out infinite; }
-        .blob-1 { width: 700px; height: 700px; background: radial-gradient(circle, rgba(239,68,68,0.15), transparent 70%); top: -200px; left: -100px; animation-duration: 25s; }
-        .blob-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(136,19,55,0.12), transparent 70%); top: 30%; right: -150px; animation-duration: 30s; animation-delay: -8s; }
-        .blob-3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(153,27,27,0.1), transparent 70%); bottom: 0; left: 30%; animation-duration: 22s; animation-delay: -14s; }
-
-        @keyframes drift {
-            0%, 100% { transform: translate(0,0) scale(1); }
-            33% { transform: translate(40px,-60px) scale(1.05); }
-            66% { transform: translate(-30px,40px) scale(0.95); }
-        }
-
-        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 22px 0; transition: all 0.4s ease; }
-        nav.scrolled { background: rgba(5,5,5,0.9); backdrop-filter: blur(28px) saturate(200%); border-bottom: 1px solid var(--border); padding: 16px 0; box-shadow: 0 8px 40px rgba(239,68,68,0.1); }
-        .nav-inner { display: flex; align-items: center; justify-content: space-between; }
-
-        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--t1); font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; transition: all 0.3s ease; }
-        .logo:hover { transform: scale(1.02); }
-        .logo:hover .logo-mark { box-shadow: 0 0 48px rgba(239,68,68,0.5), 0 0 0 2px rgba(255,255,255,0.15); }
-
-        .logo-mark { width: 38px; height: 38px; background: var(--grad-1); border-radius: 14px; display: grid; place-items: center; font-size: 18px; box-shadow: 0 0 32px rgba(239,68,68,0.4), 0 0 0 1px rgba(255,255,255,0.1); position: relative; }
-        .logo-mark::after { content: ''; position: absolute; inset: -4px; border-radius: 18px; background: inherit; filter: blur(16px); opacity: 0.5; z-index: -1; }
-
-        .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
-        .nav-links a { color: var(--t2); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.25s; letter-spacing: 0.2px; }
-        .nav-links a:hover { color: var(--t1); }
-
-        .nav-cta { display: flex; gap: 10px; align-items: center; }
-        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.4s cubic-bezier(0.23,1,0.32,1); border: none; letter-spacing: 0.1px; position: relative; overflow: hidden; font-family: 'Inter', sans-serif; }
-        .btn:hover { background: var(--p); }
-        .btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transform: translateX(-100%); transition: transform 0.6s ease; }
-        .btn:hover::before { transform: translateX(100%); }
-
-        .btn-ghost { background: transparent; color: var(--t2); border: 1px solid var(--border); }
-        .btn-ghost:hover { color: var(--t1); border-color: var(--border-accent); background: var(--surface-hover); }
-
-        .btn-primary { background: var(--grad-1); color: #FFFFFF; box-shadow: 0 4px 24px rgba(239,68,68,0.35), 0 0 0 1px rgba(239,68,68,0.15); }
-        .btn-primary:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 12px 40px rgba(239,68,68,0.45), 0 0 0 2px rgba(239,68,68,0.2); }
-
-        .btn-lg { padding: 15px 32px; font-size: 15px; border-radius: 16px; }
-        .btn-outline-lg { padding: 14px 30px; font-size: 15px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--t2); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: all 0.3s ease; }
-        .btn-outline-lg:hover { border-color: var(--border-accent); color: var(--t1); background: rgba(239,68,68,0.05); }
-
-        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; background: none; border: none; }
-        .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--t2); border-radius: 2px; transition: all 0.3s; }
-
-        .hero { position: relative; z-index: 1; min-height: 100vh; display: flex; align-items: center; text-align: center; padding: 140px 0 100px; background: radial-gradient(ellipse 120% 100% at 50% 0%, rgba(239,68,68,0.1) 0%, transparent 50%); }
-        .hero-inner { max-width: 780px; margin: 0 auto; }
-
-        .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); border-radius: 100px; font-size: 12px; font-weight: 600; color: #F87171; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 32px; animation: fadeUp 0.9s ease both; }
-        .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: #EF4444; box-shadow: 0 0 8px #EF4444; animation: blink 2s ease-in-out infinite; }
-        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        .hero h1 { font-size: clamp(42px, 7vw, 76px); font-weight: 800; margin-bottom: 24px; letter-spacing: -2px; animation: fadeUp 0.9s 0.15s ease both; }
-        .grad-text { background: var(--grad-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; position: relative; }
-        .grad-text::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #EF4444, #F87171, #FCA5A5); filter: blur(30px); opacity: 0.4; z-index: -1; }
-
-        .hero-sub { font-size: 18px; color: var(--t2); max-width: 520px; margin: 0 auto 48px; font-weight: 400; line-height: 1.75; animation: fadeUp 0.9s 0.3s ease both; }
-        .hero-actions { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; animation: fadeUp 0.9s 0.45s ease both; }
-
-        .hero-proof { display: flex; align-items: center; justify-content: center; gap: 28px; margin-top: 72px; padding-top: 48px; border-top: 1px solid var(--border); animation: fadeUp 0.9s 0.6s ease both; }
-        .proof-item { text-align: center; padding: 12px 20px; border-radius: 12px; transition: all 0.3s ease; }
-        .proof-item:hover { background: var(--surface-hover); transform: translateY(-2px); }
-        .proof-num { font-family: 'Sora', sans-serif; font-size: 30px; font-weight: 700; background: var(--grad-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -1px; }
-        .proof-label { font-size: 12px; color: var(--t3); font-weight: 500; letter-spacing: 0.3px; margin-top: 4px; }
-        .proof-divider { width: 1px; height: 36px; background: var(--border); }
-
-        @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+        /* Animations */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        
+        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s cubic-bezier(0.23,1,0.32,1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
         .section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--p); margin-bottom: 16px; }
         .section-label::before { content: ''; display: block; width: 20px; height: 1.5px; background: var(--grad-1); border-radius: 1px; }
-        .section-title { font-size: clamp(28px, 4vw, 44px); font-weight: 700; letter-spacing: -1px; margin-bottom: 16px; color: var(--t1); }
-        .section-desc { font-size: 16px; color: var(--t2); max-width: 480px; line-height: 1.75; }
+        .section-title { font-size: clamp(32px, 5vw, 48px); letter-spacing: -1.5px; margin-bottom: 20px; color: var(--t1); }
+        .section-desc { font-size: 17px; color: var(--t2); max-width: 500px; line-height: 1.6; }
 
         .features { position: relative; z-index: 1; padding: 120px 0; }
         .features-head { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 64px; }
@@ -416,7 +368,7 @@
     <nav id="nav">
         <div class="container">
             <div class="nav-inner">
-                <a href="#" class="logo">
+                <a href="/" class="logo">
                     <div class="logo-mark">✦</div>
                     Nexlands
                 </a>
@@ -568,7 +520,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-brand">
-                    <a href="#" class="logo">
+                    <a href="/" class="logo">
                         <div class="logo-mark">✦</div>
                         Nexlands
                     </a>
@@ -748,45 +700,59 @@
 
         function handleLogin(e) {
             e.preventDefault();
-            const emailInput = e.target.elements['email'];
-            const email = emailInput ? emailInput.value : '';
+            const email = e.target.elements['email'].value;
+            const password = e.target.elements['password'].value;
             
-            if (!email) {
-                alert('Lütfen e-posta adresinizi girin!');
+            if (!email || !password) {
+                alert('Lütfen e-posta ve şifrenizi girin!');
                 return;
             }
-            
-            // Demo login - simulate success
-            const user = { email: email, name: email.split('@')[0], provider: 'email', loginTime: new Date().toISOString() };
-            localStorage.setItem('nexlandsUser', JSON.stringify(user));
-            
-            closeAuthModal();
-            
-            // Show success and update UI
-            document.querySelector('.nav-cta').innerHTML = `
-                <div class="user-avatar-small">${user.name[0].toUpperCase()}</div>
-                <button class="btn btn-ghost" onclick="logout()">Çıkış</button>
-            `;
-            
-            window.location.href = '/dashboard';
-            
-            alert('Hoş geldin ' + user.name + '! Dashboard\'a gitmek için sayfayı yenile.');
+
+            const btn = e.target.querySelector('button');
+            const originalText = btn.textContent;
+            btn.textContent = 'Giriş yapılıyor...';
+            btn.disabled = true;
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('nexlandsUser', JSON.stringify(data.user));
+                    window.location.href = '/dashboard.html';
+                } else {
+                    alert('Hata: ' + (data.error || 'Giriş yapılamadı'));
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                }
+            })
+            .catch(err => {
+                console.error('Login error:', err);
+                alert('Bir hata oluştu. Lütfen tekrar deneyin.');
+                btn.textContent = originalText;
+                btn.disabled = false;
+            });
         }
 
         function handleRegister(e) {
             e.preventDefault();
-            const nameInput = e.target.elements['name'];
-            const emailInput = e.target.elements['email'];
-            const passwordInput = e.target.elements['password'];
-            const name = nameInput ? nameInput.value : '';
-            const email = emailInput ? emailInput.value : '';
-            const password = passwordInput ? passwordInput.value : '';
+            const name = e.target.elements['name'].value;
+            const email = e.target.elements['email'].value;
+            const password = e.target.elements['password'].value;
             
-            if (!email || !name) {
-                alert('Lütfen adınızı ve e-posta adresinizi girin!');
+            if (!email || !name || !password) {
+                alert('Lütfen tüm alanları doldurun!');
                 return;
             }
-            
+
+            const btn = e.target.querySelector('button');
+            const originalText = btn.textContent;
+            btn.textContent = 'Hesap oluşturuluyor...';
+            btn.disabled = true;
+
             fetch('/api/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -796,19 +762,19 @@
             .then(data => {
                 if (data.success) {
                     localStorage.setItem('nexlandsUser', JSON.stringify(data.user));
-                    closeAuthModal();
-                    document.querySelector('.nav-cta').innerHTML = `
-                        <div class="user-avatar-small">${data.user.name[0].toUpperCase()}</div>
-                        <button class="btn btn-ghost" onclick="logout()">Çıkış</button>
-                    `;
-                    window.location.href = '/dashboard';
+                    alert('Kaydınız başarıyla oluşturuldu! Dashboard\'a yönlendiriliyorsunuz.');
+                    window.location.href = '/dashboard.html';
                 } else {
                     alert('Kayıt başarısız: ' + (data.error || 'Bilinmeyen hata'));
+                    btn.textContent = originalText;
+                    btn.disabled = false;
                 }
             })
             .catch(err => {
                 console.error('Register error:', err);
-                alert('Kayıt işlenirken hata oluştu');
+                alert('Kayıt sırasında teknik bir sorun oluştu.');
+                btn.textContent = originalText;
+                btn.disabled = false;
             });
         }
 
@@ -816,7 +782,7 @@
         
         function socialLogin(provider) {
             const baseUrl = window.location.origin;
-            const redirectUri = baseUrl + '/auth-callback';
+            const redirectUri = baseUrl + '/auth-callback.html';
             
             const authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
                 'client_id=' + GOOGLE_CLIENT_ID + '&' +
@@ -830,43 +796,9 @@
             window.location.href = authUrl;
         }
         
-        function handleGoogleCallback() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-            const error = urlParams.get('error');
-            
-            if (error) {
-                alert('Giriş başarısız: ' + error);
-                window.location.href = window.location.pathname;
-                return;
-            }
-            
-            if (code) {
-                fetch('/auth-callback?code=' + encodeURIComponent(code), {
-                    method: 'POST',
-                    credentials: 'include'
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success && data.user) {
-                        const user = data.user;
-                        localStorage.setItem('nexlandsUser', JSON.stringify(user));
-                        window.location.href = '/dashboard';
-                    } else {
-                        alert('Giriş başarısız: ' + (data.error || 'Bilinmeyen hata'));
-                        window.location.href = window.location.pathname;
-                    }
-                })
-                .catch(err => {
-                    console.error('Callback error:', err);
-                    alert('Giriş işlenirken hata oluştu');
-                    window.location.href = window.location.pathname;
-                });
-            }
-        }
-        
-        if (window.location.pathname.includes('auth-callback') || window.location.search.includes('code=')) {
-            handleGoogleCallback();
+        // Auth handled by separate callback page
+        if (window.location.pathname.includes('auth-callback.html')) {
+            // Callback handled by auth-callback.html
         }
 
         function logout() {

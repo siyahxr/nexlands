@@ -466,17 +466,42 @@
         // Check login
         const userData = localStorage.getItem('nexlandsUser');
         if (!userData) {
-            window.location.href = 'index.html';
+            window.location.href = '/';
         } else {
-            const user = JSON.parse(userData);
-            document.getElementById('userName').textContent = user.name || 'Kullanıcı';
-            document.getElementById('userAvatar').textContent = (user.name || 'K')[0].toUpperCase();
+            try {
+                const user = JSON.parse(userData);
+                document.getElementById('userName').textContent = user.name || 'Kullanıcı';
+                
+                const avatar = document.getElementById('userAvatar');
+                if (user.avatar) {
+                    avatar.innerHTML = `<img src="${user.avatar}" alt="${user.name}" style="width:100%; height:100%; border-radius:inherit; object-fit:cover;">`;
+                } else {
+                    avatar.textContent = (user.name || 'K')[0].toUpperCase();
+                }
+            } catch (e) {
+                console.error('Invalid user data', e);
+                localStorage.removeItem('nexlandsUser');
+                window.location.href = '/';
+            }
         }
 
         function logout() {
-            localStorage.removeItem('nexlandsUser');
-            window.location.href = 'index.html';
+            if (confirm('Çıkış yapmak istediğinize emin misiniz?')) {
+                localStorage.removeItem('nexlandsUser');
+                window.location.href = '/';
+            }
         }
+        
+        // Dynamic animation for cards on hover
+        document.querySelectorAll('.stat-card, .action-card, .activity-item').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
     </script>
 </body>
 </html>

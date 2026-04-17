@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Loading...</title>
+    <script>
+        async function handleCallback() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const error = urlParams.get('error');
+            
+            if (error) {
+                alert('Giriş başarısız: ' + error);
+                window.location.href = '/';
+                return;
+            }
+            
+            if (code) {
+                try {
+                    const res = await fetch('/api/auth-callback?code=' + encodeURIComponent(code), {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+                    const data = await res.json();
+                    
+                    if (data.success && data.user) {
+                        localStorage.setItem('nexlandsUser', JSON.stringify(data.user));
+                        window.location.href = '/dashboard.html';
+                    } else {
+                        alert('Giriş başarısız: ' + (data.error || 'Bilinmeyen hata'));
+                        window.location.href = '/';
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Giriş işlenirken hata oluştu');
+                    window.location.href = '/';
+                }
+            } else {
+                window.location.href = '/';
+            }
+        }
+        handleCallback();
+    </script>
+</head>
+<body></body>
+</html>

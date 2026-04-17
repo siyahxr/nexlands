@@ -17,7 +17,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   }
 
   try {
-    const redirectUri = `${url.origin}/auth-callback`;
+    const redirectUri = `${url.origin}/auth-callback.html`;
     
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
@@ -46,19 +46,46 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
     const userData = await userResponse.json() as { email?: string; name?: string; picture?: string };
 
-    if (env.KV) {
-      const currentUsers = parseInt(await env.KV.get('stats:users') || '50000');
-      await env.KV.put('stats:users', String(currentUsers + 1));
+    if (!userData.email) {
+      return new Response(JSON.stringify({ error: 'Could not retrieve user email' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
-    const response = new Response(JSON.stringify({
+    const userObj = {
+      email: userData.email,
+      name: userData.name,
+      avatar: userData.picture,
+      provider: 'google',
+      lastLogin: new Date().toISOString()
+    };
+
+    // Store user if they don't exist or update last login
+    const existingUser = await env.KV.get('user:' + userData.email);
+    if (!existingUser) {
+      // New user registration via Google
+      await env.KV.put('user:' + userData.email, JSON.stringify({
+        ...userObj,
+        createdAt: new Date().toISOString()
+      }));
+      
+      // Increment stats for new user
+      const currentUsers = parseInt(await env.KV.get('stats:users') || '50000');
+      await env.KV.put('stats:users', String(currentUsers + 1));
+    } else {
+      // Update existing user
+      const updatedUser = { ...JSON.parse(existingUser), ...userObj };
+      await env.KV.put('user:' + userData.email, JSON.stringify(updatedUser));
+    }
+
+    return new Response(JSON.stringify({
       success: true,
       user: {
-        email: userData.email,
-        name: userData.name,
-        avatar: userData.picture,
-        provider: 'google',
-        loginTime: new Date().toISOString()
+        email: userObj.email,
+        name: userObj.name,
+        avatar: userObj.avatar,
+        provider: 'google'
       }
     }), {
       status: 200,
@@ -67,8 +94,6 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         'Set-Cookie': `session=${tokenData.access_token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600`
       }
     });
-
-    return response;
   } catch (error) {
     return new Response(JSON.stringify({ error: 'Server error' }), {
       status: 500,
