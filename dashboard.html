@@ -993,19 +993,22 @@
                     body: JSON.stringify({
                         channel: currentChannel,
                         text: text,
-                        authorName: activeUser.name,
-                        authorEmail: activeUser.email,
-                        authorAvatar: activeUser.avatar
+                        authorName: activeUser.name || 'Misafir',
+                        authorEmail: activeUser.email || 'anonim',
+                        authorAvatar: activeUser.avatar || ''
                     })
                 });
                 
                 if (res.ok) {
                     input.value = '';
                     await loadMessages();
+                } else {
+                    const errorObj = await res.json();
+                    showFeatureNotif('Hata: ' + (errorObj.error || 'Mesaj gönderilemedi'));
                 }
             } catch (err) {
                 console.error(err);
-                showFeatureNotif('Mesaj gönderilemedi');
+                showFeatureNotif('Sunucuya bağlanılamadı');
             }
 
             input.disabled = false;

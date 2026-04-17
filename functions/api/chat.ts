@@ -24,13 +24,16 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   if (request.method === 'POST') {
     try {
       const data = await request.json();
-      const { text, authorName, authorEmail, authorAvatar } = data;
+      const { channel: bodyChannel, text, authorName, authorEmail, authorAvatar } = data;
+      
+      const targetChannel = bodyChannel || channel;
+      const postKvKey = 'chat:' + targetChannel;
 
       if (!text || !authorEmail) {
         return new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400 });
       }
 
-      const messagesStr = await env.KV.get(kvKey);
+      const messagesStr = await env.KV.get(postKvKey);
       let messages = messagesStr ? JSON.parse(messagesStr) : [];
 
       const newMessage = {
@@ -49,7 +52,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         messages = messages.slice(messages.length - 50);
       }
 
-      await env.KV.put(kvKey, JSON.stringify(messages));
+      await env.KV.put(postKvKey, JSON.stringify(messages));
 
       return new Response(JSON.stringify({ success: true, message: newMessage }), {
         status: 200,
