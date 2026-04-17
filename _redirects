@@ -1,4 +1,2 @@
-# Cloudflare Pages Redirects
+# Final Fix for Redirect Loops
 /topluluklar/* /dashboard.html 200
-/dashboard /dashboard.html 200
-/dashboard/* /dashboard.html 200
