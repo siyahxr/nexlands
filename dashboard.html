@@ -305,7 +305,16 @@
         .toast.show { transform: translateY(0); }
         .toast i { color: #22C55E; font-size: 20px; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* View System */
+        .view-section { display: none; animation: fadeIn 0.4s ease-out; }
+        .view-section.active { display: block; }
+        
+        .empty-state { text-align: center; padding: 60px 20px; background: var(--bg-sidebar); border: 1px dashed var(--border-accent); border-radius: 24px; }
+        .empty-state i { font-size: 48px; color: var(--border-accent); margin-bottom: 16px; }
+        .empty-state h3 { font-size: 20px; color: var(--t1); margin-bottom: 8px; }
+        .empty-state p { color: var(--t2); font-size: 14px; margin-bottom: 24px; }
 
         /* Responsive */
         @media (max-width: 1024px) {
@@ -333,21 +342,21 @@
             <div class="sidebar-nav">
                 <div class="nav-group">
                     <p class="nav-label">Menü</p>
-                    <a href="dashboard.html" class="nav-item active"><i class="fas fa-home"></i> Dashboard</a>
-                    <a href="#" class="nav-item" onclick="showFeatureNotif('Oyunlar')"><i class="fas fa-gamepad"></i> Oyunlar</a>
-                    <a href="#" class="nav-item" onclick="showFeatureNotif('Sınıflar')"><i class="fas fa-users"></i> Sınıflarım</a>
-                    <a href="#" class="nav-item" onclick="showFeatureNotif('Analitik')"><i class="fas fa-chart-line"></i> Analizler</a>
+                    <a href="#" class="nav-item active" onclick="switchView('dashboard', this)"><i class="fas fa-home"></i> Dashboard</a>
+                    <a href="#" class="nav-item" onclick="switchView('oyunlar', this)"><i class="fas fa-gamepad"></i> Oyunlar</a>
+                    <a href="#" class="nav-item" onclick="switchView('siniflar', this)"><i class="fas fa-users"></i> Sınıflarım</a>
+                    <a href="#" class="nav-item" onclick="switchView('analitik', this)"><i class="fas fa-chart-line"></i> Analizler</a>
                 </div>
 
                 <div class="nav-group">
                     <p class="nav-label">Yaratıcılık</p>
-                    <a href="#" class="nav-item" onclick="showFeatureNotif('Editör')"><i class="fas fa-plus-circle"></i> Yeni Quiz Oluştur</a>
-                    <a href="#" class="nav-item" onclick="showFeatureNotif('Kütüphane')"><i class="fas fa-book-open"></i> Kayıtlı İçerikler</a>
+                    <a href="#" class="nav-item" onclick="switchView('editor', this)"><i class="fas fa-plus-circle"></i> Yeni Quiz Oluştur</a>
+                    <a href="#" class="nav-item" onclick="switchView('kutuphane', this)"><i class="fas fa-book-open"></i> Kayıtlı İçerikler</a>
                 </div>
 
                 <div class="nav-group">
                     <p class="nav-label">Hesap</p>
-                    <a href="#" class="nav-item" onclick="showFeatureNotif('Ayarlar')"><i class="fas fa-cog"></i> Ayarlar</a>
+                    <a href="#" class="nav-item" onclick="switchView('ayarlar', this)"><i class="fas fa-cog"></i> Ayarlar</a>
                     <a href="#" class="nav-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
                 </div>
             </div>
@@ -391,108 +400,243 @@
                 </div>
             </header>
 
-            <div class="content-body">
-                <section class="welcome-hero">
-                    <div class="hero-text">
-                        <h1>Hoş geldin, <span id="heroName">Maceracı</span>! 👋</h1>
-                        <p>Bugün neleri keşfetmek istersin? İlerlemeni tamamlamak için 3 yeni quiz seni bekliyor.</p>
-                        <div class="hero-stats">
-                            <div class="hero-stat-item">
-                                <span class="hero-stat-val">24</span>
-                                <span class="hero-stat-lbl">Tamamlanan</span>
+            <div class="content-body" id="mainViews">
+                
+                <!-- DASHBOARD VIEW -->
+                <div id="view-dashboard" class="view-section active">
+                    <section class="welcome-hero">
+                        <div class="hero-text">
+                            <h1>Hoş geldin, <span id="heroName">Maceracı</span>! 👋</h1>
+                            <p>Bugün neleri keşfetmek istersin? İlerlemeni tamamlamak için 3 yeni quiz seni bekliyor.</p>
+                            <div class="hero-stats">
+                                <div class="hero-stat-item">
+                                    <span class="hero-stat-val">24</span>
+                                    <span class="hero-stat-lbl">Tamamlanan</span>
+                                </div>
+                                <div class="hero-stat-item">
+                                    <span class="hero-stat-val">8.4k</span>
+                                    <span class="hero-stat-lbl">Toplam Puan</span>
+                                </div>
+                                <div class="hero-stat-item">
+                                    <span class="hero-stat-val">%89</span>
+                                    <span class="hero-stat-lbl">Başarı Oranı</span>
+                                </div>
                             </div>
-                            <div class="hero-stat-item">
-                                <span class="hero-stat-val">8.4k</span>
-                                <span class="hero-stat-lbl">Toplam Puan</span>
+                        </div>
+                    </section>
+
+                    <div class="dashboard-grid">
+                        <!-- Recommended Game 1 -->
+                        <div class="card game-card">
+                            <div class="game-thumb">
+                                <img src="https://images.unsplash.com/photo-1614728263952-84ea206f2c40?auto=format&fit=crop&w=800&q=80" alt="Space Quiz">
+                                <span class="game-badge">Popüler</span>
                             </div>
-                            <div class="hero-stat-item">
-                                <span class="hero-stat-val">%89</span>
-                                <span class="hero-stat-lbl">Başarı Oranı</span>
+                            <h3 class="card-title">Uzay Macerası</h3>
+                            <p style="font-size: 13px; color: var(--t2);">Güneş sistemi ve ötesini keşfet.</p>
+                            <button class="btn-game" onclick="startGame('Uzay Macerası')">Oyna</button>
+                        </div>
+
+                        <!-- Recommended Game 2 -->
+                        <div class="card game-card">
+                            <div class="game-thumb">
+                                <img src="https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&w=800&q=80" alt="History Quiz">
+                                <span class="game-badge" style="background: #3B82F6;">Yeni</span>
+                            </div>
+                            <h3 class="card-title">Dünya Tarihi</h3>
+                            <p style="font-size: 13px; color: var(--t2);">Büyük imparatorlukların yükselişi.</p>
+                            <button class="btn-game" onclick="startGame('Dünya Tarihi')">Oyna</button>
+                        </div>
+
+                        <!-- Recommended Game 3 -->
+                        <div class="card game-card">
+                            <div class="game-thumb">
+                                <img src="https://images.unsplash.com/photo-1518152006812-edab29b069ac?auto=format&fit=crop&w=800&q=80" alt="Science Quiz">
+                            </div>
+                            <h3 class="card-title">Atomik Bilim</h3>
+                            <p style="font-size: 13px; color: var(--t2);">Moleküler dünyanın gizemleri.</p>
+                            <button class="btn-game" onclick="startGame('Atomik Bilim')">Oyna</button>
+                        </div>
+
+                        <!-- Stats Card -->
+                        <div class="card" style="grid-column: span 2;">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-fire" style="color: var(--p)"></i> Haftalık Aktivite</h3>
+                                <a href="#" style="color: var(--p); font-size: 12px; text-decoration: none;">Detaylar</a>
+                            </div>
+                            <div style="height: 120px; display: flex; align-items: flex-end; gap: 8px; padding-top: 10px;">
+                                <div style="flex: 1; height: 30%; background: var(--surface); border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 50%; background: var(--surface); border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 80%; background: var(--p); border-radius: 4px; box-shadow: 0 0 15px var(--p-glow);"></div>
+                                <div style="flex: 1; height: 40%; background: var(--surface); border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 60%; background: var(--surface); border-radius: 4px;"></div>
+                                <div style="flex: 1; height: 90%; background: var(--grad-1); border-radius: 4px; box-shadow: 0 0 15px var(--p-glow);"></div>
+                                <div style="flex: 1; height: 20%; background: var(--surface); border-radius: 4px;"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 10px; color: var(--t3); font-weight: 600;">
+                                <span>PZT</span><span>SAL</span><span>ÇAR</span><span>PER</span><span>CUM</span><span>CMT</span><span>PAZ</span>
                             </div>
                         </div>
-                    </div>
-                </section>
 
-                <div class="dashboard-grid">
-                    <!-- Recommended Game 1 -->
-                    <div class="card game-card">
-                        <div class="game-thumb">
-                            <img src="https://images.unsplash.com/photo-1614728263952-84ea206f2c40?auto=format&fit=crop&w=800&q=80" alt="Space Quiz">
-                            <span class="game-badge">Popüler</span>
-                        </div>
-                        <h3 class="card-title">Uzay Macerası</h3>
-                        <p style="font-size: 13px; color: var(--t2);">Güneş sistemi ve ötesini keşfet.</p>
-                        <button class="btn-game" onclick="startGame('Uzay Macerası')">Oyna</button>
-                    </div>
-
-                    <!-- Recommended Game 2 -->
-                    <div class="card game-card">
-                        <div class="game-thumb">
-                            <img src="https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&w=800&q=80" alt="History Quiz">
-                            <span class="game-badge" style="background: #3B82F6;">Yeni</span>
-                        </div>
-                        <h3 class="card-title">Dünya Tarihi</h3>
-                        <p style="font-size: 13px; color: var(--t2);">Büyük imparatorlukların yükselişi.</p>
-                        <button class="btn-game" onclick="startGame('Dünya Tarihi')">Oyna</button>
-                    </div>
-
-                    <!-- Recommended Game 3 -->
-                    <div class="card game-card">
-                        <div class="game-thumb">
-                            <img src="https://images.unsplash.com/photo-1518152006812-edab29b069ac?auto=format&fit=crop&w=800&q=80" alt="Science Quiz">
-                        </div>
-                        <h3 class="card-title">Atomik Bilim</h3>
-                        <p style="font-size: 13px; color: var(--t2);">Moleküler dünyanın gizemleri.</p>
-                        <button class="btn-game" onclick="startGame('Atomik Bilim')">Oyna</button>
-                    </div>
-
-                    <!-- Stats Card -->
-                    <div class="card" style="grid-column: span 2;">
-                        <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-fire" style="color: var(--p)"></i> Haftalık Aktivite</h3>
-                            <a href="#" style="color: var(--p); font-size: 12px; text-decoration: none;">Detaylar</a>
-                        </div>
-                        <div style="height: 120px; display: flex; align-items: flex-end; gap: 8px; padding-top: 10px;">
-                            <div style="flex: 1; height: 30%; background: var(--surface); border-radius: 4px;"></div>
-                            <div style="flex: 1; height: 50%; background: var(--surface); border-radius: 4px;"></div>
-                            <div style="flex: 1; height: 80%; background: var(--p); border-radius: 4px; box-shadow: 0 0 15px var(--p-glow);"></div>
-                            <div style="flex: 1; height: 40%; background: var(--surface); border-radius: 4px;"></div>
-                            <div style="flex: 1; height: 60%; background: var(--surface); border-radius: 4px;"></div>
-                            <div style="flex: 1; height: 90%; background: var(--grad-1); border-radius: 4px; box-shadow: 0 0 15px var(--p-glow);"></div>
-                            <div style="flex: 1; height: 20%; background: var(--surface); border-radius: 4px;"></div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 10px; color: var(--t3); font-weight: 600;">
-                            <span>PZT</span><span>SAL</span><span>ÇAR</span><span>PER</span><span>CUM</span><span>CMT</span><span>PAZ</span>
-                        </div>
-                    </div>
-
-                    <!-- Social Card -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Liderlik Tablosu</h3>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 12px;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="width: 24px; color: var(--p); font-weight: 800;">1</div>
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background: #FBBF24;"></div>
-                                <span style="font-size: 13px; flex: 1;">Kaan Yılmaz</span>
-                                <span style="font-size: 12px; font-weight: 700;">12,450</span>
+                        <!-- Social Card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Liderlik Tablosu</h3>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="width: 24px; color: #D1D5DB; font-weight: 800;">2</div>
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background: #94A3B8;"></div>
-                                <span style="font-size: 13px; flex: 1;">Zeynep Kara</span>
-                                <span style="font-size: 12px; font-weight: 700;">11,200</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="width: 24px; color: #B45309; font-weight: 800;">3</div>
-                                <div style="width: 32px; height: 32px; border-radius: 50%; background: #E2E8F0;"></div>
-                                <span style="font-size: 13px; flex: 1;">Alperen Tan</span>
-                                <span style="font-size: 12px; font-weight: 700;">9,800</span>
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 24px; color: var(--p); font-weight: 800;">1</div>
+                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #FBBF24;"></div>
+                                    <span style="font-size: 13px; flex: 1;">Kaan Yılmaz</span>
+                                    <span style="font-size: 12px; font-weight: 700;">12,450</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 24px; color: #D1D5DB; font-weight: 800;">2</div>
+                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #94A3B8;"></div>
+                                    <span style="font-size: 13px; flex: 1;">Zeynep Kara</span>
+                                    <span style="font-size: 12px; font-weight: 700;">11,200</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 24px; color: #B45309; font-weight: 800;">3</div>
+                                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #E2E8F0;"></div>
+                                    <span style="font-size: 13px; flex: 1;">Alperen Tan</span>
+                                    <span style="font-size: 12px; font-weight: 700;">9,800</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- OYUNLAR VIEW -->
+                <div id="view-oyunlar" class="view-section">
+                    <div style="margin-bottom: 32px;">
+                        <h2 style="font-family:'Sora',sans-serif; font-size: 32px; margin-bottom: 8px;">Tüm Oyunlar</h2>
+                        <p style="color: var(--t2);">Kütüphanedeki tüm oyunları keşfet ve öğrenmeye başla.</p>
+                    </div>
+                    
+                    <div class="dashboard-grid">
+                        <div class="card game-card">
+                            <div class="game-thumb"><img src="https://images.unsplash.com/photo-1614728263952-84ea206f2c40?auto=format&fit=crop&w=800&q=80" alt="Uzay"></div>
+                            <h3 class="card-title">Uzay Macerası</h3>
+                            <button class="btn-game" onclick="startGame('Uzay Macerası')">Oyna</button>
+                        </div>
+                        <div class="card game-card">
+                            <div class="game-thumb"><img src="https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&w=800&q=80" alt="Tarih"></div>
+                            <h3 class="card-title">Dünya Tarihi</h3>
+                            <button class="btn-game" onclick="startGame('Dünya Tarihi')">Oyna</button>
+                        </div>
+                        <div class="card game-card">
+                            <div class="game-thumb"><img src="https://images.unsplash.com/photo-1518152006812-edab29b069ac?auto=format&fit=crop&w=800&q=80" alt="Bilim"></div>
+                            <h3 class="card-title">Atomik Bilim</h3>
+                            <button class="btn-game" onclick="startGame('Atomik Bilim')">Oyna</button>
+                        </div>
+                        <div class="card game-card">
+                            <div class="game-thumb" style="background: linear-gradient(135deg, #10B981, #059669);"><i class="fas fa-leaf" style="font-size:48px; color:#fff; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);"></i></div>
+                            <h3 class="card-title">Biyoloji: Hücreler</h3>
+                            <button class="btn-game" onclick="startGame('Biyoloji: Hücreler')">Oyna</button>
+                        </div>
+                        <div class="card game-card">
+                            <div class="game-thumb" style="background: linear-gradient(135deg, #8B5CF6, #6D28D9);"><i class="fas fa-square-root-alt" style="font-size:48px; color:#fff; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);"></i></div>
+                            <h3 class="card-title">İleri Matematik</h3>
+                            <button class="btn-game" onclick="startGame('İleri Matematik')">Oyna</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SINIFLAR VIEW -->
+                <div id="view-siniflar" class="view-section">
+                    <div style="margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2 style="font-family:'Sora',sans-serif; font-size: 32px; margin-bottom: 8px;">Sınıflarım</h2>
+                            <p style="color: var(--t2);">Katıldığın sınıflar ve gruplardaki performansın.</p>
+                        </div>
+                        <button class="btn-game" style="width: auto; padding: 12px 24px;" onclick="showFeatureNotif('Sınıfa Katıl')">
+                            <i class="fas fa-plus"></i> Yeni Sınıfa Katıl
+                        </button>
+                    </div>
+
+                    <div class="empty-state">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <h3>Henüz bir sınıfa katılmadın</h3>
+                        <p>Öğretmeninden aldığın sınıf kodunu kullanarak hemen bir sınıfa katıl.</p>
+                        <button class="btn-game" style="width: auto; padding: 12px 32px;" onclick="showFeatureNotif('Sınıfa Katıl')">Sınıf Kodu Gir</button>
+                    </div>
+                </div>
+
+                <!-- ANALITIK VIEW -->
+                <div id="view-analitik" class="view-section">
+                    <div style="margin-bottom: 32px;">
+                        <h2 style="font-family:'Sora',sans-serif; font-size: 32px; margin-bottom: 8px;">Detaylı Analizler</h2>
+                        <p style="color: var(--t2);">Tüm oyunlardaki performans eğrilerin ve gelişim raporun.</p>
+                    </div>
+                    
+                    <div class="empty-state">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>Daha fazla veriye ihtiyacımız var</h3>
+                        <p>Detaylı analizler oluşturabilmemiz için en az 5 oyun oynamalısın. Şu ana kadar oynadığın: 0</p>
+                        <button class="btn-game" style="width: auto; padding: 12px 32px;" onclick="switchView('oyunlar', document.querySelector('.nav-item:nth-child(2)'))">Oyunlara Git</button>
+                    </div>
+                </div>
+
+                <!-- EDITOR VIEW -->
+                <div id="view-editor" class="view-section">
+                    <div style="margin-bottom: 32px;">
+                        <h2 style="font-family:'Sora',sans-serif; font-size: 32px; margin-bottom: 8px;">Quiz Editörü</h2>
+                        <p style="color: var(--t2);">Kendi oyununu tasarla ve arkadaşlarınla paylaş.</p>
+                    </div>
+                    
+                    <div class="empty-state">
+                        <i class="fas fa-paint-brush"></i>
+                        <h3>Sihirli Editör Çok Yakında!</h3>
+                        <p>Kendi oyunlarınızı sürükle-bırak yöntemiyle yaratabileceğiniz gelişmiş editörümüz şu an yapım aşamasında.</p>
+                        <button class="btn-game" style="width: auto; padding: 12px 32px; background: transparent; border: 1px solid var(--border-accent); color: var(--t1);" onclick="showFeatureNotif('Erken Erişim')">Erken Erişim Talebi Gönder</button>
+                    </div>
+                </div>
+
+                <!-- KUTUPHANE VIEW -->
+                <div id="view-kutuphane" class="view-section">
+                    <div style="margin-bottom: 32px;">
+                        <h2 style="font-family:'Sora',sans-serif; font-size: 32px; margin-bottom: 8px;">Kütüphanem</h2>
+                        <p style="color: var(--t2);">Kaydettiğin ve beğendiğin içerikler.</p>
+                    </div>
+                    
+                    <div class="empty-state">
+                        <i class="fas fa-bookmark"></i>
+                        <h3>Kütüphanen boş görünüyor</h3>
+                        <p>Oyunları favorilere ekleyerek kütüphanende biriktirebilirsin.</p>
+                    </div>
+                </div>
+
+                <!-- AYARLAR VIEW -->
+                <div id="view-ayarlar" class="view-section">
+                    <div style="margin-bottom: 32px;">
+                        <h2 style="font-family:'Sora',sans-serif; font-size: 32px; margin-bottom: 8px;">Hesap Ayarları</h2>
+                        <p style="color: var(--t2);">Profilini düzenle ve tercihlerini yönet.</p>
+                    </div>
+                    
+                    <div class="card" style="max-width: 600px;">
+                        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 32px;">
+                            <div class="user-pill-avatar" id="settingsAvatar" style="width: 80px; height: 80px; font-size: 32px; border-radius: 20px;">?</div>
+                            <div>
+                                <h3 id="settingsName" style="font-size: 20px; margin-bottom: 4px;">Kullanıcı</h3>
+                                <p style="color: var(--t2); font-size: 14px;">Premium Üye</p>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; flex-direction:column; gap: 16px;">
+                            <div>
+                                <label style="display:block; font-size: 12px; color: var(--t3); margin-bottom:8px;">GÖRÜNEN AD</label>
+                                <input type="text" class="search-bar" style="width:100%;" placeholder="Adınız" disabled value="Kullanıcı Adı">
+                            </div>
+                            <div>
+                                <label style="display:block; font-size: 12px; color: var(--t3); margin-bottom:8px;">E-POSTA</label>
+                                <input type="text" class="search-bar" style="width:100%;" placeholder="E-posta" disabled value="Kullanıcı E-Postası" id="settingsEmail">
+                            </div>
+                            <button class="btn-game" style="margin-top: 16px;" onclick="showFeatureNotif('Profil Güncelleme')">Profili Güncelle</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -529,6 +673,16 @@
                     document.getElementById('headerAvatar').innerHTML = `<img src="${user.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
                 }
 
+                // Settings View hydration
+                document.getElementById('settingsName').textContent = user.name || 'Öğrenci';
+                document.getElementById('settingsEmail').value = user.email || 'Email Yok';
+                const setAvatar = document.getElementById('settingsAvatar');
+                if (user.avatar) {
+                    setAvatar.innerHTML = `<img src="${user.avatar}" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;">`;
+                } else {
+                    setAvatar.textContent = (user.name || 'Ö')[0].toUpperCase();
+                }
+
             } catch (e) {
                 console.error('Data error', e);
                 localStorage.removeItem('nexlandsUser');
@@ -542,6 +696,30 @@
             msg.innerHTML = `<strong>${feature}</strong> özelliği yakında sizlerle! ✨`;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function switchView(viewId, element) {
+            // Update nav active state
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if (element) {
+                element.classList.add('active');
+            }
+
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(view => {
+                view.classList.remove('active');
+            });
+
+            // Show target view
+            const target = document.getElementById('view-' + viewId);
+            if (target) {
+                target.classList.add('active');
+            }
+            
+            // On mobile, close sidebar when clicking a link
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('mobile-open');
+            }
         }
 
         function startGame(name) {
