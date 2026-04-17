@@ -696,14 +696,14 @@
                         
                         // We reuse the basic 'game-card' design just for convenience, or build a custom pill UI
                         grid.innerHTML += `
-                            <div class="game-card reveal" style="min-width: 200px; flex: 1 1 200px; max-width: 300px; transition-delay: ${delay}s">
+                            <div class="game-card reveal" style="min-width: 200px; flex: 1 1 200px; max-width: 300px; transition-delay: ${delay}s; cursor: pointer;" onclick="goToCommunity('${ch.name.replace(/'/g, "\\'")}')">
                                 <div style="display: flex; align-items: center; gap: 12px; padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px;">
                                     <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.05); display:grid; place-items:center; color: ${ch.color || '#A855F7'}; font-size: 20px;">
                                         <i class="fas ${ch.icon || 'fa-hashtag'}"></i>
                                     </div>
                                     <div style="flex:1;">
                                         <h3 style="font-size: 16px; margin:0; color: var(--t1);">${ch.name}</h3>
-                                        <p style="font-size: 12px; color: var(--t3); margin: 4px 0 0;">Genel Sohbet</p>
+                                        <p style="font-size: 12px; color: var(--t3); margin: 4px 0 0;">Katılmak için tıkla</p>
                                     </div>
                                 </div>
                             </div>
@@ -724,6 +724,14 @@
             // Start polling communities periodically
             setInterval(loadHomeCommunities, 10000); 
         });
+
+        function goToCommunity(name) {
+            if (!localStorage.getItem('nexlandsUser') || localStorage.getItem('nexlandsUser') === 'undefined' || localStorage.getItem('nexlandsUser') === 'null') {
+                openAuthModal('login');
+                return;
+            }
+            window.location.href = '/dashboard.html?view=topluluk&channel=' + encodeURIComponent(name);
+        }
         
         function runCounters() {
             if (countersRun) return;

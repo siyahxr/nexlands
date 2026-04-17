@@ -1061,7 +1061,22 @@
         // Initialize user status automatically checks logic on load
         // Window load listener (optional but good for hydration)
         window.addEventListener('load', () => {
-            // Already handled by switchView logic or default views if manipulated
+            const urlParams = new URLSearchParams(window.location.search);
+            const view = urlParams.get('view');
+            const channel = urlParams.get('channel');
+            
+            if (view) {
+                // Find matching nav element to highlight
+                const navElements = Array.from(document.querySelectorAll('.nav-item'));
+                const targetNav = navElements.find(el => el.getAttribute('onclick') && el.getAttribute('onclick').includes(`switchView('${view}'`));
+                
+                switchView(view, targetNav || null);
+                
+                if (view === 'topluluk' && channel) {
+                    currentChannel = channel;
+                    // SwitchView triggers loadChannels(), which will then openChannel(currentChannel)
+                }
+            }
         });
 
         function logout() {
