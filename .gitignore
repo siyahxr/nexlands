@@ -1,0 +1,9 @@
+node_modules/
+.kilocode/
+.DS_Store
+*.log
+.env
+.env.local
+_vault.json
+wrangler.toml
+dist/

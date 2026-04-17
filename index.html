@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexlands — Öğrenmenin Yeni Yolu</title>
+    <meta name="description" content="Nexlands ile quiz, hikaye ve sınıf oyunlarıyla öğrenmeyi eğlenceye dönüştür.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #DC2626;
+            --red-light: #EF4444;
+            --red-soft: #F87171;
+            --red-dark: #991B1B;
+            --maroon: #7F1D1D;
+            --burgundy: #4C0519;
+            --black: #0A0A0A;
+            --black2: #111111;
+            --black3: #1A0505;
+            --p: #EF4444;
+            --p2: #F87171;
+            --p3: #DC2626;
+            --rose: #881337;
+            --bg: #050505;
+            --bg2: #0A0A0A;
+            --bg3: #111111;
+            --surface: rgba(255,255,255,0.02);
+            --surface-hover: rgba(255,255,255,0.04);
+            --border: rgba(239,68,68,0.08);
+            --border-accent: rgba(239,68,68,0.2);
+            --border-strong: rgba(239,68,68,0.35);
+            --t1: #FAFAFA;
+            --t2: #A1A1AA;
+            --t3: #71717A;
+            --t4: #52525B;
+            --grad-1: linear-gradient(135deg, #EF4444 0%, #F87171 50%, #FDA4AF 100%);
+            --grad-hero: radial-gradient(ellipse 100% 80% at 50% 0%, rgba(239,68,68,0.1) 0%, transparent 60%);
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; font-size:16px; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--t1);
+            overflow-x: hidden;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(239,68,68,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(239,68,68,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        h1,h2,h3,h4 { font-family: 'Sora', sans-serif; line-height: 1.15; }
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+
+        .blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(120px); animation: drift 20s ease-in-out infinite; }
+        .blob-1 { width: 700px; height: 700px; background: radial-gradient(circle, rgba(239,68,68,0.15), transparent 70%); top: -200px; left: -100px; animation-duration: 25s; }
+        .blob-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(136,19,55,0.12), transparent 70%); top: 30%; right: -150px; animation-duration: 30s; animation-delay: -8s; }
+        .blob-3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(153,27,27,0.1), transparent 70%); bottom: 0; left: 30%; animation-duration: 22s; animation-delay: -14s; }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0,0) scale(1); }
+            33% { transform: translate(40px,-60px) scale(1.05); }
+            66% { transform: translate(-30px,40px) scale(0.95); }
+        }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 22px 0; transition: all 0.4s ease; }
+        nav.scrolled { background: rgba(5,5,5,0.9); backdrop-filter: blur(28px) saturate(200%); border-bottom: 1px solid var(--border); padding: 16px 0; box-shadow: 0 8px 40px rgba(239,68,68,0.1); }
+        .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--t1); font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; transition: all 0.3s ease; }
+        .logo:hover { transform: scale(1.02); }
+        .logo:hover .logo-mark { box-shadow: 0 0 48px rgba(239,68,68,0.5), 0 0 0 2px rgba(255,255,255,0.15); }
+
+        .logo-mark { width: 38px; height: 38px; background: var(--grad-1); border-radius: 14px; display: grid; place-items: center; font-size: 18px; box-shadow: 0 0 32px rgba(239,68,68,0.4), 0 0 0 1px rgba(255,255,255,0.1); position: relative; }
+        .logo-mark::after { content: ''; position: absolute; inset: -4px; border-radius: 18px; background: inherit; filter: blur(16px); opacity: 0.5; z-index: -1; }
+
+        .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+        .nav-links a { color: var(--t2); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.25s; letter-spacing: 0.2px; }
+        .nav-links a:hover { color: var(--t1); }
+
+        .nav-cta { display: flex; gap: 10px; align-items: center; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 14px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.4s cubic-bezier(0.23,1,0.32,1); border: none; letter-spacing: 0.1px; position: relative; overflow: hidden; font-family: 'Inter', sans-serif; }
+        .btn:hover { background: var(--p); }
+        .btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transform: translateX(-100%); transition: transform 0.6s ease; }
+        .btn:hover::before { transform: translateX(100%); }
+
+        .btn-ghost { background: transparent; color: var(--t2); border: 1px solid var(--border); }
+        .btn-ghost:hover { color: var(--t1); border-color: var(--border-accent); background: var(--surface-hover); }
+
+        .btn-primary { background: var(--grad-1); color: #FFFFFF; box-shadow: 0 4px 24px rgba(239,68,68,0.35), 0 0 0 1px rgba(239,68,68,0.15); }
+        .btn-primary:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 12px 40px rgba(239,68,68,0.45), 0 0 0 2px rgba(239,68,68,0.2); }
+
+        .btn-lg { padding: 15px 32px; font-size: 15px; border-radius: 16px; }
+        .btn-outline-lg { padding: 14px 30px; font-size: 15px; border-radius: 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--t2); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: all 0.3s ease; }
+        .btn-outline-lg:hover { border-color: var(--border-accent); color: var(--t1); background: rgba(239,68,68,0.05); }
+
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; background: none; border: none; }
+        .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--t2); border-radius: 2px; transition: all 0.3s; }
+
+        .hero { position: relative; z-index: 1; min-height: 100vh; display: flex; align-items: center; text-align: center; padding: 140px 0 100px; background: radial-gradient(ellipse 120% 100% at 50% 0%, rgba(239,68,68,0.1) 0%, transparent 50%); }
+        .hero-inner { max-width: 780px; margin: 0 auto; }
+
+        .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); border-radius: 100px; font-size: 12px; font-weight: 600; color: #F87171; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 32px; animation: fadeUp 0.9s ease both; }
+        .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: #EF4444; box-shadow: 0 0 8px #EF4444; animation: blink 2s ease-in-out infinite; }
+        @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .hero h1 { font-size: clamp(42px, 7vw, 76px); font-weight: 800; margin-bottom: 24px; letter-spacing: -2px; animation: fadeUp 0.9s 0.15s ease both; }
+        .grad-text { background: var(--grad-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; position: relative; }
+        .grad-text::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #EF4444, #F87171, #FCA5A5); filter: blur(30px); opacity: 0.4; z-index: -1; }
+
+        .hero-sub { font-size: 18px; color: var(--t2); max-width: 520px; margin: 0 auto 48px; font-weight: 400; line-height: 1.75; animation: fadeUp 0.9s 0.3s ease both; }
+        .hero-actions { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; animation: fadeUp 0.9s 0.45s ease both; }
+
+        .hero-proof { display: flex; align-items: center; justify-content: center; gap: 28px; margin-top: 72px; padding-top: 48px; border-top: 1px solid var(--border); animation: fadeUp 0.9s 0.6s ease both; }
+        .proof-item { text-align: center; padding: 12px 20px; border-radius: 12px; transition: all 0.3s ease; }
+        .proof-item:hover { background: var(--surface-hover); transform: translateY(-2px); }
+        .proof-num { font-family: 'Sora', sans-serif; font-size: 30px; font-weight: 700; background: var(--grad-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -1px; }
+        .proof-label { font-size: 12px; color: var(--t3); font-weight: 500; letter-spacing: 0.3px; margin-top: 4px; }
+        .proof-divider { width: 1px; height: 36px; background: var(--border); }
+
+        @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+
+        .section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--p); margin-bottom: 16px; }
+        .section-label::before { content: ''; display: block; width: 20px; height: 1.5px; background: var(--grad-1); border-radius: 1px; }
+        .section-title { font-size: clamp(28px, 4vw, 44px); font-weight: 700; letter-spacing: -1px; margin-bottom: 16px; color: var(--t1); }
+        .section-desc { font-size: 16px; color: var(--t2); max-width: 480px; line-height: 1.75; }
+
+        .features { position: relative; z-index: 1; padding: 120px 0; }
+        .features-head { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 64px; }
+        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+        .card { background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%); border: 1px solid var(--border); border-radius: 24px; padding: 40px 36px; transition: all 0.5s cubic-bezier(0.23,1,0.32,1); position: relative; overflow: hidden; }
+        .card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(239,68,68,0.1), transparent 40%); opacity: 0; transition: opacity 0.5s ease; }
+        .card::after { content: ''; position: absolute; inset: 0; border-radius: 24px; background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, transparent 50%); opacity: 0; transition: opacity 0.5s ease; }
+        .card:hover { border-color: var(--border-accent); transform: translateY(-8px); box-shadow: 0 32px 64px rgba(0,0,0,0.5), 0 0 40px rgba(239,68,68,0.1); }
+        .card:hover::before, .card:hover::after { opacity: 1; }
+
+        .card-icon { width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; font-size: 26px; margin-bottom: 28px; position: relative; z-index: 1; transition: all 0.4s ease; }
+        .card:hover .card-icon { transform: scale(1.1) rotate(3deg); }
+        .icon-a { background: linear-gradient(135deg, rgba(248,113,113,0.25), rgba(239,68,68,0.2)); border: 1px solid rgba(248,113,113,0.35); box-shadow: 0 8px 24px rgba(239,68,68,0.2); }
+        .icon-b { background: linear-gradient(135deg, rgba(153,27,27,0.3), rgba(136,19,55,0.2)); border: 1px solid rgba(153,27,27,0.4); box-shadow: 0 8px 24px rgba(153,27,27,0.2); }
+        .icon-c { background: linear-gradient(135deg, rgba(127,29,29,0.3), rgba(112,9,31,0.2)); border: 1px solid rgba(127,29,29,0.4); box-shadow: 0 8px 24px rgba(127,29,29,0.2); }
+
+        .card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--t1); position: relative; z-index: 1; }
+        .card p { font-size: 14px; color: var(--t2); line-height: 1.7; position: relative; z-index: 1; }
+
+        .steps-section { position: relative; z-index: 1; padding: 120px 0; background: linear-gradient(180deg, transparent, rgba(17,17,17,0.5) 30%, rgba(17,17,17,0.5) 70%, transparent); }
+        .steps-head { text-align: center; margin-bottom: 80px; }
+        .steps-head .section-label { justify-content: center; }
+        .steps-head .section-label::before { display: none; }
+
+        .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; position: relative; }
+        .steps-grid::before { content: ''; position: absolute; top: 36px; left: calc(12.5% + 16px); right: calc(12.5% + 16px); height: 1px; background: linear-gradient(90deg, transparent, var(--border-accent), var(--border-accent), transparent); }
+
+        .step { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 16px; }
+        .step-num { width: 80px; height: 80px; border-radius: 24px; background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%); border: 1px solid var(--border-accent); display: grid; place-items: center; font-family: 'Sora', sans-serif; font-size: 24px; font-weight: 700; color: #F87171; margin-bottom: 28px; position: relative; z-index: 1; box-shadow: 0 0 0 8px var(--bg), 0 0 40px rgba(239,68,68,0.15); transition: all 0.4s ease; }
+        .step:hover .step-num { border-color: var(--p); box-shadow: 0 0 0 8px var(--bg), 0 0 60px rgba(239,68,68,0.25); transform: scale(1.05); }
+        .step h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--t1); }
+        .step p { font-size: 13px; color: var(--t2); line-height: 1.65; }
+
+        .stats-section { position: relative; z-index: 1; padding: 100px 0; background: linear-gradient(180deg, transparent, rgba(17,17,17,0.6) 40%, rgba(17,17,17,0.6) 60%, transparent); }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: linear-gradient(135deg, var(--border-accent), var(--border)); border: 1px solid var(--border-accent); border-radius: 28px; overflow: hidden; position: relative; }
+        .stats-grid::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 100% 50% at 50% 0%, rgba(239,68,68,0.08) 0%, transparent 70%); pointer-events: none; }
+
+        .stat-cell { background: var(--bg); padding: 52px 40px; text-align: center; }
+        .stat-num { font-family: 'Sora', sans-serif; font-size: 52px; font-weight: 800; background: var(--grad-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -2px; margin-bottom: 12px; display: block; position: relative; }
+        .stat-num::after { content: '+'; font-size: inherit; background: none; -webkit-text-fill-color: var(--p); position: absolute; margin-left: 4px; }
+        .stat-desc { font-size: 14px; color: var(--t3); font-weight: 500; letter-spacing: 0.2px; }
+
+        .cta-section { position: relative; z-index: 1; padding: 140px 0; background: var(--bg); }
+        .cta-wrap { text-align: center; background: linear-gradient(180deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.01) 100%); border: 1px solid var(--border-accent); border-radius: 32px; padding: 100px 56px; position: relative; overflow: hidden; }
+        .cta-wrap::before { content: ''; position: absolute; width: 800px; height: 500px; background: radial-gradient(ellipse, rgba(239,68,68,0.08) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; animation: pulse 8s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 0.5; } 50% { transform: translate(-50%,-50%) scale(1.1); opacity: 0.8; } }
+        .cta-wrap h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; position: relative; }
+        .cta-wrap p { font-size: 16px; color: var(--t2); margin-bottom: 40px; max-width: 440px; margin-left: auto; margin-right: auto; position: relative; }
+
+        .mobile-menu { display: none; position: fixed; inset: 0; background: rgba(5,5,5,0.98); backdrop-filter: blur(20px); z-index: 99; flex-direction: column; align-items: center; justify-content: center; gap: 40px; }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 700; color: var(--t1); text-decoration: none; opacity: 0.7; transition: opacity 0.2s; }
+        .mobile-menu a:hover { opacity: 1; }
+        .mobile-close { position: absolute; top: 28px; right: 28px; background: none; border: none; color: var(--t2); font-size: 28px; cursor: pointer; line-height: 1; }
+
+        /* Footer */
+        footer { position: relative; z-index: 1; padding: 80px 0 40px; border-top: 1px solid var(--border); background: linear-gradient(180deg, transparent, rgba(10,10,10,0.8)); }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+        .footer-brand { max-width: 280px; }
+        .footer-brand p { font-size: 14px; color: var(--t2); margin-top: 16px; line-height: 1.7; }
+        .footer-social { display: flex; gap: 12px; margin-top: 20px; }
+        .social-link { width: 40px; height: 40px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--t2); text-decoration: none; font-size: 14px; font-weight: 600; transition: all 0.3s ease; }
+        .social-link:hover { border-color: var(--p); color: var(--p); transform: translateY(-2px); cursor: pointer; }
+
+        .footer-col h4 { font-size: 13px; font-weight: 600; color: var(--t1); margin-bottom: 20px; letter-spacing: 0.5px; }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 12px; }
+        .footer-col a { font-size: 13px; color: var(--t2); text-decoration: none; transition: color 0.2s; }
+        .footer-col a:hover { color: var(--t1); }
+        
+        .footer-link-btn {
+            background: none;
+            border: none;
+            color: var(--t2);
+            font-size: 13px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            padding: 0;
+            transition: color 0.2s;
+        }
+        .footer-link-btn:hover { color: var(--t1); }
+
+        .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 32px; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 16px; }
+        .footer-copy { font-size: 13px; color: var(--t3); }
+        .footer-legal { display: flex; gap: 24px; }
+        .footer-legal a { font-size: 13px; color: var(--t3); text-decoration: none; transition: color 0.2s; }
+        .footer-legal a:hover { color: var(--t1); }
+
+        /* Cookie Banner */
+        .cookie-banner { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--bg2); border: 1px solid var(--border-accent); border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; gap: 20px; z-index: 1000; box-shadow: 0 20px 60px rgba(0,0,0,0.5); opacity: 0; transition: all 0.5s cubic-bezier(0.23,1,0.32,1); }
+        .cookie-banner.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .cookie-banner p { font-size: 13px; color: var(--t2); margin: 0; }
+        .cookie-banner a { color: var(--p); text-decoration: none; }
+        .cookie-banner a:hover { text-decoration: underline; }
+        .cookie-buttons { display: flex; gap: 10px; flex-shrink: 0; }
+        .cookie-btn { 
+            padding: 12px 24px; 
+            border-radius: 10px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cookie-btn.reject { 
+            background: transparent; 
+            border: 1px solid var(--border); 
+            color: var(--t1); 
+        }
+        
+        .cookie-btn.reject:hover { 
+            border-color: var(--p); 
+            background: rgba(239,68,68,0.15); 
+            color: var(--p); 
+        }
+        
+        .cookie-btn.accept { 
+            background: var(--grad-1); 
+            border: none; 
+            color: #FFFFFF; 
+        }
+        
+        .cookie-btn.accept:hover { 
+            box-shadow: 0 6px 24px rgba(239,68,68,0.4); 
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 1024px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } .steps-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } .steps-grid::before { display: none; } .footer-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 768px) { .nav-links, .nav-cta { display: none; } .hamburger { display: flex; } .hero { padding: 120px 0 80px; } .hero-sub { font-size: 16px; } .hero-proof { gap: 20px; flex-wrap: wrap; } .proof-num { font-size: 22px; } .cards-grid { grid-template-columns: 1fr; } .steps-grid { grid-template-columns: 1fr 1fr; } .stats-grid { grid-template-columns: 1fr; } .stat-cell { padding: 36px 24px; } .cta-wrap { padding: 60px 24px; } .footer-grid { grid-template-columns: 1fr; gap: 32px; } .footer-bottom { flex-direction: column; text-align: center; } .cookie-banner { flex-direction: column; text-align: center; padding: 24px; } }
+        @media (max-width: 480px) { .steps-grid { grid-template-columns: 1fr; } .hero-proof { flex-direction: column; gap: 16px; } .proof-divider { display: none; } .hero-actions { flex-direction: column; width: 100%; } .btn-lg, .btn-outline-lg { width: 100%; justify-content: center; } }
+
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* Auth Modal */
+        .auth-modal { display: none; position: fixed; inset: 0; z-index: 2000; }
+        .auth-modal.show { display: block; }
+        .auth-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); }
+        .auth-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: var(--bg2); border: 1px solid var(--border-accent); border-radius: 24px; padding: 48px; max-width: 420px; width: 90%; box-shadow: 0 40px 100px rgba(0,0,0,0.6); }
+        .auth-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--t2); font-size: 24px; cursor: pointer; transition: color 0.3s; }
+        .auth-close:hover { color: var(--t1); }
+        
+        .auth-header h2 { font-size: 24px; margin-bottom: 8px; color: var(--t1); }
+        .auth-header p { font-size: 14px; color: var(--t2); }
+
+        /* Legal Modal */
+        .legal-modal { display: none; position: fixed; inset: 0; z-index: 2000; }
+        .legal-modal.show { display: block; }
+        .legal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+        .legal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: var(--bg2); border: 1px solid var(--border-accent); border-radius: 20px; padding: 48px; max-width: 700px; max-height: 80vh; overflow-y: auto; width: 90%; box-shadow: 0 40px 100px rgba(0,0,0,0.6); }
+        .legal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--t2); font-size: 24px; cursor: pointer; transition: color 0.3s; }
+        .legal-close:hover { color: var(--t1); }
+        .legal-content h2 { font-size: 28px; margin-bottom: 24px; color: var(--t1); }
+        .legal-content h3 { font-size: 18px; margin: 28px 0 12px; color: var(--t1); }
+        .legal-content p, .legal-content li { font-size: 14px; color: var(--t2); line-height: 1.8; margin-bottom: 12px; }
+        .legal-content ul { padding-left: 20px; }
+        .legal-content li { margin-bottom: 8px; }
+        .legal-content strong { color: var(--t1); }
+        
+        /* Login/Register Modal */
+        .auth-tabs { display: flex; gap: 4px; background: var(--surface); padding: 4px; border-radius: 12px; margin-bottom: 24px; }
+        .auth-tab { flex: 1; padding: 12px; border: none; background: none; color: var(--t2); font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 10px; transition: all 0.3s; font-family: 'Inter', sans-serif; }
+        .auth-tab.active { background: var(--bg); color: var(--t1); box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .auth-tab:hover:not(.active) { color: var(--t1); }
+        
+        .user-avatar-small {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--grad-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .auth-form { display: none; }
+        .auth-form.active { display: block; }
+        
+        .auth-input { width: 100%; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--t1); font-size: 14px; margin-bottom: 16px; transition: all 0.3s; font-family: 'Inter', sans-serif; }
+        .auth-input:focus { outline: none; border-color: var(--p); background: var(--surface-hover); }
+        .auth-input::placeholder { color: var(--t3); }
+        
+        .auth-submit { width: 100%; padding: 14px; background: var(--grad-1); border: none; border-radius: 12px; color: #FFF; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif; }
+        .auth-submit:hover { box-shadow: 0 6px 24px rgba(239,68,68,0.35); transform: translateY(-2px); }
+        
+        .auth-divider { display: flex; align-items: center; gap: 16px; margin: 24px 0; color: var(--t3); font-size: 13px; }
+        .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+        
+        .social-auth { display: flex; gap: 12px; }
+        .social-auth button { flex: 1; padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--t1); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Inter', sans-serif; }
+        .social-auth button:hover { border-color: var(--border-accent); background: var(--surface-hover); }
+        
+        .auth-back { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; font-size: 13px; color: var(--t2); }
+        .auth-back a { color: var(--p); text-decoration: none; font-weight: 500; }
+        .auth-back a:hover { text-decoration: underline; }
+        
+        .auth-link-btn { 
+            background: none;
+            border: none;
+            color: var(--p);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .auth-link-btn:hover { text-decoration: underline; }
+        </style>
+<body>
+
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-backdrop" onclick="closeAuthModal()"></div>
+        <div class="auth-content">
+            
+            <div class="auth-header">
+                <div class="logo-mark" style="width:48px;height:48px;font-size:22px;margin:0 auto 16px;">✦</div>
+                <h2 style="text-align:center;font-size:24px;margin-bottom:8px;">Nexlands</h2>
+                <p style="text-align:center;color:var(--t2);font-size:14px;">Öğrenmeye hazır mısın?</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuth('login')">Giriş Yap</button>
+                <button class="auth-tab" onclick="switchAuth('register')">Hesap Oluştur</button>
+            </div>
+            
+            <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+                <input type="email" name="email" class="auth-input" placeholder="E-posta adresi" required>
+                <input type="password" name="password" class="auth-input" placeholder="Şifre">
+                <button type="submit" class="auth-submit">Giriş Yap</button>
+            </form>
+            
+            <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+                <input type="text" name="name" class="auth-input" placeholder="Ad Soyad" required>
+                <input type="email" name="email" class="auth-input" placeholder="E-posta adresi" required>
+                <input type="password" name="password" class="auth-input" placeholder="Şifre" required minlength="6">
+                <button type="submit" class="auth-submit">Hesap Oluştur</button>
+            </form>
+            
+            <div class="auth-divider">ya da</div>
+            
+            <div class="social-auth">
+                <button type="button" onclick="socialLogin('google')">
+                    <span>G</span> Google
+                </button>
+                <button type="button" onclick="socialLogin('github')">
+                    <span>𝕏</span> X
+                </button>
+            </div>
+            
+            <div class="auth-back">
+                <button type="button" class="auth-link-btn" onclick="switchAuth('login')" id="authSwitchLink">Hesabın yok mu? Kaydol</button>
+            </div>
+        </div>
+    </div>
+    <div class="legal-modal" id="legalModal">
+        <div class="legal-backdrop" onclick="closeLegalModal()"></div>
+        <div class="legal-content">
+            <button class="legal-close" onclick="closeLegalModal()">✕</button>
+            <div id="legalBody"></div>
+        </div>
+    </div>
+
+    <div class="blobs" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav id="nav">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="#" class="logo">
+                    <div class="logo-mark">✦</div>
+                    Nexlands
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#features">Özellikler</a></li>
+                    <li><a href="#how">Nasıl Çalışır</a></li>
+                    <li><a href="#cta">İletişim</a></li>
+                </ul>
+                <div class="nav-cta">
+                    <button type="button" class="btn btn-ghost" onclick="openAuthModal('login')">Giriş Yap</button>
+                    <button type="button" class="btn btn-primary" onclick="openAuthModal('register')">Başla</button>
+                </div>
+                <button class="hamburger" id="hamBtn" aria-label="Menü">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-close" id="closeBtn">✕</button>
+        <a href="#features" onclick="closeMenu()">Özellikler</a>
+        <a href="#how" onclick="closeMenu()">Nasıl Çalışır</a>
+        <a href="#cta" onclick="closeMenu()">İletişim</a>
+        <a href="#" class="btn btn-primary btn-lg" onclick="openAuthModal('register');closeMenu()">Hemen Başla</a>
+    </div>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-inner">
+                <div class="eyebrow">
+                    <span class="eyebrow-dot"></span>
+                    Yeni Nesil Eğitim
+                </div>
+                <h1>Öğrenmeyi<br><span class="grad-text">Maceraya Dönüştür</span></h1>
+                <p class="hero-sub">Quiz'leri, hikayeleri ve rekabeti tek platformda birleştiren Nexlands ile hem öğren hem eğlen.</p>
+                <div class="hero-actions">
+                    <button type="button" class="btn btn-primary btn-lg" onclick="openAuthModal('register')">Oynamaya Başla</button>
+                    <a href="#how" class="btn-outline-lg">Nasıl Çalışır →</a>
+                </div>
+                <div class="hero-proof">
+                    <div class="proof-item">
+                        <div class="proof-num" data-stat="users" data-target="50000">0</div>
+                        <div class="proof-label">Aktif Öğrenci</div>
+                    </div>
+                    <div class="proof-divider"></div>
+                    <div class="proof-item">
+                        <div class="proof-num" data-stat="games" data-target="1200">0</div>
+                        <div class="proof-label">Oluşturulan Oyun</div>
+                    </div>
+                    <div class="proof-divider"></div>
+                    <div class="proof-item">
+                        <div class="proof-num" data-stat="answers" data-target="100000">0</div>
+                        <div class="proof-label">Cevaplanan Soru</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="features-head reveal">
+                <div class="section-label">Oyun Modları</div>
+                <h2 class="section-title">Her öğrenci için<br>bir mod var</h2>
+                <p class="section-desc">Üç farklı oyun deneyimiyle öğrenmeyi kişiselleştir.</p>
+            </div>
+            <div class="cards-grid">
+                <div class="card reveal" style="transition-delay:0.05s">
+                    <div class="card-icon icon-a">⚡</div>
+                    <h3>Quiz Modu</h3>
+                    <p>Süre baskısı altında hız ve doğruluk. Liderlik tablosunda zirveye tırman.</p>
+                </div>
+                <div class="card reveal" style="transition-delay:0.12s">
+                    <div class="card-icon icon-b">📖</div>
+                    <h3>Hikaye Modu</h3>
+                    <p>Her doğru cevap hikayeyi ilerletir. Dallanan seçimlerle öğren.</p>
+                </div>
+                <div class="card reveal" style="transition-delay:0.19s">
+                    <div class="card-icon icon-c">👥</div>
+                    <h3>Sınıf Modu</h3>
+                    <p>Öğretmenler için: oyun oluştur, ödev ver, öğrenci takip et.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="steps-section" id="how">
+        <div class="container">
+            <div class="steps-head reveal">
+                <div class="section-label">Nasıl Çalışır</div>
+                <h2 class="section-title">4 adımda başla</h2>
+            </div>
+            <div class="steps-grid">
+                <div class="step reveal" style="transition-delay:0.05s">
+                    <div class="step-num">1</div>
+                    <h3>Kaydol</h3>
+                    <p>Ücretsiz hesap oluştur.</p>
+                </div>
+                <div class="step reveal" style="transition-delay:0.12s">
+                    <div class="step-num">2</div>
+                    <h3>Oluştur</h3>
+                    <p>Kendi quizini tasarla.</p>
+                </div>
+                <div class="step reveal" style="transition-delay:0.19s">
+                    <div class="step-num">3</div>
+                    <h3>Paylaş</h3>
+                    <p>Tek linkle davet et.</p>
+                </div>
+                <div class="step reveal" style="transition-delay:0.26s">
+                    <div class="step-num">4</div>
+                    <h3>Oyna</h3>
+                    <p>Öğrenirken eğlen.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid reveal">
+                <div class="stat-cell">
+                    <span class="stat-num" data-stat="users" data-target="50000">0</span>
+                    <div class="stat-desc">Aktif Öğrenci</div>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-num" data-stat="games" data-target="1200">0</span>
+                    <div class="stat-desc">Oluşturulan Oyun</div>
+                </div>
+                <div class="stat-cell">
+                    <span class="stat-num" data-stat="answers" data-target="100000">0</span>
+                    <div class="stat-desc">Cevaplanan Soru</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="cta">
+        <div class="container">
+            <div class="cta-wrap reveal">
+                <h2>Denemeye hazır mısın?</h2>
+                <p>Binlerce öğrenci ve öğretmen halihazırda Nexlands'i kullanıyor.</p>
+                <button type="button" class="btn btn-primary btn-lg" onclick="openAuthModal('register')">Ücretsiz Başla</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <div class="logo-mark">✦</div>
+                        Nexlands
+                    </a>
+                    <p>Öğrenmeyi maceraya dönüştüren yenilikçi eğitim platformu.</p>
+                    <div class="footer-social">
+                        <a href="https://twitter.com/nexlands" target="_blank" class="social-link" aria-label="Twitter">𝕏</a>
+                        <a href="https://instagram.com/nexlands" target="_blank" class="social-link" aria-label="Instagram">◉</a>
+                        <a href="https://linkedin.com/company/nexlands" target="_blank" class="social-link" aria-label="LinkedIn">in</a>
+                        <a href="https://youtube.com/@nexlands" target="_blank" class="social-link" aria-label="YouTube">▶</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="#features">Özellikler</a></li>
+                        <li><a href="#how">Nasıl Çalışır</a></li>
+                        <li><a href="#">Fiyatlandırma</a></li>
+                        <li><a href="#">API</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Şirket</h4>
+                    <ul>
+                        <li><button type="button" class="footer-link-btn" onclick="showLegalPage('hakkimizda')">Hakkımızda</button></li>
+                        <li><a href="#">Kariyer</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">İletişim</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Yasal</h4>
+                    <ul>
+                        <li><button type="button" class="footer-link-btn" onclick="showLegalPage('gizlilik')">Gizlilik Politikası</button></li>
+                        <li><button type="button" class="footer-link-btn" onclick="showLegalPage('kvkk')">KVKK Aydınlatma</button></li>
+                        <li><button type="button" class="footer-link-btn" onclick="showLegalPage('kullanim')">Kullanım Şartları</button></li>
+                        <li><button type="button" class="footer-link-btn" onclick="showLegalPage('cerez')">Çerez Politikası</button></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copy">© 2026 Nexlands. Tüm hakları saklıdır.</p>
+                <div class="footer-legal">
+                    <button type="button" class="footer-link-btn" onclick="showLegalPage('gizlilik')">Gizlilik</button>
+                    <button type="button" class="footer-link-btn" onclick="showLegalPage('kullanim')">Şartlar</button>
+                    <button type="button" class="footer-link-btn" onclick="showLegalPage('cerez')">Çerezler</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="cookie-banner" id="cookieBanner">
+        <p>
+            Bu site çerezler kullanıyor. 
+            <button type="button" class="footer-link-btn" onclick="showLegalPage('cerez')">Çerez Politikası</button> ve 
+            <button type="button" class="footer-link-btn" onclick="showLegalPage('gizlilik')">Gizlilik Politikası</button>'nı okudum kabul ediyorum.
+        </p>
+        <div class="cookie-buttons">
+            <button class="cookie-btn reject" onclick="rejectCookies()">Reddet</button>
+            <button class="cookie-btn accept" onclick="acceptCookies()">Kabul Et</button>
+        </div>
+    </div>
+
+    <script>
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+
+        document.getElementById('hamBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.add('open'));
+        document.getElementById('closeBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
+        function closeMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
+
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const t = document.querySelector(a.getAttribute('href'));
+                if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+            });
+        });
+
+        const revealObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        let countersRun = false;
+        let statsLoaded = false;
+        
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                if (data.users) {
+                    document.querySelectorAll('[data-stat="users"]').forEach(el => el.dataset.target = data.users);
+                    document.querySelectorAll('[data-stat="games"]').forEach(el => el.dataset.target = data.games);
+                    document.querySelectorAll('[data-stat="answers"]').forEach(el => el.dataset.target = data.answers);
+                    statsLoaded = true;
+                }
+            } catch (e) {
+                console.log('Stats API not available, using defaults');
+            }
+        }
+        
+        function runCounters() {
+            if (countersRun) return;
+            const nums = document.querySelectorAll('[data-target]');
+            const anyVisible = [...nums].some(el => el.getBoundingClientRect().top < window.innerHeight * 0.9);
+            if (!anyVisible) return;
+            countersRun = true;
+            
+            if (!statsLoaded) loadStats();
+            
+            setTimeout(() => {
+                nums.forEach(el => {
+                    const target = +el.dataset.target;
+                    const duration = 1800;
+                    const step = target / (duration / 16);
+                    let cur = 0;
+                    const tick = () => {
+                        cur = Math.min(cur + step, target);
+                        el.textContent = Math.floor(cur).toLocaleString('tr') + '+';
+                        if (cur < target) requestAnimationFrame(tick);
+                    };
+                    tick();
+                });
+            }, 100);
+        }
+        window.addEventListener('scroll', runCounters);
+        runCounters();
+
+        // Cookie Banner
+        setTimeout(() => {
+            if (!localStorage.getItem('cookiesAccepted')) {
+                document.getElementById('cookieBanner').classList.add('show');
+            }
+        }, 2000);
+
+        function acceptCookies() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookieBanner').classList.remove('show');
+        }
+        function rejectCookies() {
+            localStorage.setItem('cookiesAccepted', 'false');
+            document.getElementById('cookieBanner').classList.remove('show');
+        }
+
+        // Auth Functions
+        function openAuthModal(tab) {
+            document.getElementById('authModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+            switchAuth(tab);
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function switchAuth(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+                document.getElementById('authSwitchLink').textContent = 'Hesabın yok mu? Kaydol';
+                document.getElementById('authSwitchLink').setAttribute('onclick', "switchAuth('register')");
+            } else {
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+                document.getElementById('authSwitchLink').textContent = 'Hesabın var mı? Giriş yap';
+                document.getElementById('authSwitchLink').setAttribute('onclick', "switchAuth('login')");
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const emailInput = e.target.elements['email'];
+            const email = emailInput ? emailInput.value : '';
+            
+            if (!email) {
+                alert('Lütfen e-posta adresinizi girin!');
+                return;
+            }
+            
+            // Demo login - simulate success
+            const user = { email: email, name: email.split('@')[0], provider: 'email', loginTime: new Date().toISOString() };
+            localStorage.setItem('nexlandsUser', JSON.stringify(user));
+            
+            closeAuthModal();
+            
+            // Show success and update UI
+            document.querySelector('.nav-cta').innerHTML = `
+                <div class="user-avatar-small">${user.name[0].toUpperCase()}</div>
+                <button class="btn btn-ghost" onclick="logout()">Çıkış</button>
+            `;
+            
+            window.location.href = '/dashboard';
+            
+            alert('Hoş geldin ' + user.name + '! Dashboard\'a gitmek için sayfayı yenile.');
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const nameInput = e.target.elements['name'];
+            const emailInput = e.target.elements['email'];
+            const passwordInput = e.target.elements['password'];
+            const name = nameInput ? nameInput.value : '';
+            const email = emailInput ? emailInput.value : '';
+            const password = passwordInput ? passwordInput.value : '';
+            
+            if (!email || !name) {
+                alert('Lütfen adınızı ve e-posta adresinizi girin!');
+                return;
+            }
+            
+            fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, name, password })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('nexlandsUser', JSON.stringify(data.user));
+                    closeAuthModal();
+                    document.querySelector('.nav-cta').innerHTML = `
+                        <div class="user-avatar-small">${data.user.name[0].toUpperCase()}</div>
+                        <button class="btn btn-ghost" onclick="logout()">Çıkış</button>
+                    `;
+                    window.location.href = '/dashboard';
+                } else {
+                    alert('Kayıt başarısız: ' + (data.error || 'Bilinmeyen hata'));
+                }
+            })
+            .catch(err => {
+                console.error('Register error:', err);
+                alert('Kayıt işlenirken hata oluştu');
+            });
+        }
+
+        const GOOGLE_CLIENT_ID = 'YOUR_CLIENT_ID.apps.googleusercontent.com';
+        
+        function socialLogin(provider) {
+            const baseUrl = window.location.origin;
+            const redirectUri = baseUrl + '/auth-callback';
+            
+            const authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
+                'client_id=' + GOOGLE_CLIENT_ID + '&' +
+                'redirect_uri=' + encodeURIComponent(redirectUri) + '&' +
+                'response_type=code&' +
+                'scope=email profile openid&' +
+                'access_type=offline&' +
+                'prompt=consent&' +
+                'state=google_login';
+            
+            window.location.href = authUrl;
+        }
+        
+        function handleGoogleCallback() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const error = urlParams.get('error');
+            
+            if (error) {
+                alert('Giriş başarısız: ' + error);
+                window.location.href = window.location.pathname;
+                return;
+            }
+            
+            if (code) {
+                fetch('/auth-callback?code=' + encodeURIComponent(code), {
+                    method: 'POST',
+                    credentials: 'include'
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.user) {
+                        const user = data.user;
+                        localStorage.setItem('nexlandsUser', JSON.stringify(user));
+                        window.location.href = '/dashboard';
+                    } else {
+                        alert('Giriş başarısız: ' + (data.error || 'Bilinmeyen hata'));
+                        window.location.href = window.location.pathname;
+                    }
+                })
+                .catch(err => {
+                    console.error('Callback error:', err);
+                    alert('Giriş işlenirken hata oluştu');
+                    window.location.href = window.location.pathname;
+                });
+            }
+        }
+        
+        if (window.location.pathname.includes('auth-callback') || window.location.search.includes('code=')) {
+            handleGoogleCallback();
+        }
+
+        function logout() {
+            localStorage.removeItem('nexlandsUser');
+            document.querySelector('.nav-cta').innerHTML = `
+                <button type="button" class="btn btn-ghost" onclick="openAuthModal('login')">Giriş Yap</button>
+                <button type="button" class="btn btn-primary" onclick="openAuthModal('register')">Başla</button>
+            `;
+            alert('Çıkış yapıldı!');
+        }
+
+        // Legal Pages Content
+        const legalContent = {
+            'hakkimizda': `
+                <h2>Hakkımızda</h2>
+                <p><strong>Nexlands</strong>, eğitimi eğlenceli bir maceraya dönüştürmek vizyonuyla kurulmuş bir edtech platformudur. Quiz oyunları, interaktif hikayeler ve sınıf yönetimi araçlarıyla öğrenmeyi daha keyifli hale getiriyoruz.</p>
+                <h3>Misyonumuz</h3>
+                <p>Her öğrencinin öğrenmeyi sevmesini sağlamak. Geleneksel sınav ve ödev yöntemlerini oyunlaştırarak hem öğretmenlerin hem de öğrencilerin zamanı daha verimli kullanmasını amaçlıyoruz.</p>
+                <h3>Değerlerimiz</h3>
+                <ul>
+                    <li><strong>Eğlence + Eğitim:</strong> Öğrenmek hiç bu kadar keyifli olmamıştı.</li>
+                    <li><strong>Erişilebilirlik:</strong> Herkes için ücretsiz temel kullanım.</li>
+                    <li><strong>Güvenlik:</strong> Verileriniz bizim için önemli.</li>
+                    <li><strong>Yenilik:</strong> Sürekli gelişen teknoloji.</li>
+                </ul>
+                <h3>İletişim</h3>
+                <p>info@nexlands.com<br>Destek için yardım@nexlands.com</p>
+            `,
+            'gizlilik': `
+                <h2>Gizlilik Politikası</h2>
+                <p>Bu Gizlilik Politikası, Nexlands'i ("biz", "platform") kullanırken kişisel verilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu açıklar.</p>
+                <h3>Topladığımız Veriler</h3>
+                <ul>
+                    <li><strong>Hesap Bilgileri:</strong> Ad, e-posta, şifre (şifreli).</li>
+                    <li><strong>Kullanım Verileri:</strong> Oyun geçmişi, skorlar, ilerleme.</li>
+                    <li><strong>Teknik Veriler:</strong> IP adresi, tarayıcı türü, cihaz bilgileri.</li>
+                </ul>
+                <h3>Verilerin Kullanımı</h3>
+                <p>Toplanan veriler platform hizmetlerini sunmak, iyileştirmek ve kullanıcı deneyimini geliştirmek için kullanılır.</p>
+                <h3>Veri Koruma</h3>
+                <p>Tüm veriler şifrelenmiş bağlantılar (SSL/TLS) ile aktarılır ve güvenli sunucularda saklanır.</p>
+                <h3>İletişim</h3>
+                <p>Gizlilik ile ilgili sorularınız için: gizlilik@nexlands.com</p>
+            `,
+            'kvkk': `
+                <h2>KVKK Aydınlatma Metni</h2>
+                <p>6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında kişisel verilerinizin işlenmesine ilişkin sizi bilgilendirmek isteriz.</p>
+                <h3>Veri Sorumlusu</h3>
+                <p><strong>Nexlands</strong><br>info@nexlands.com</p>
+                <h3>İşlenen Kişisel Veriler</h3>
+                <ul>
+                    <li>Kimlik bilgileri (ad, soyad)</li>
+                    <li>İletişim bilgileri (e-posta)</li>
+                    <li>Eğitim verileri (kullanım geçmişi, skorlar)</li>
+                </ul>
+                <h3>İşleme Amaçları</h3>
+                <p>Platform hizmetlerinin sunulması, yasal yükümlülüklerin yerine getirilmesi.</p>
+                <h3>Haklarınız</h3>
+                <p>KVKK kapsamında erişim, düzeltme, silme ve itiraz haklarınızı kullanabilirsiniz.</p>
+            `,
+            'kullanim': `
+                <h2>Kullanım Şartları</h2>
+                <p>Bu Kullanım Şartları, Nexlands platformunu kullanımınızı düzenler. Platformu kullanarak bu şartları kabul etmiş sayılırsınız.</p>
+                <h3>Hizmet Kullanımı</h3>
+                <p>Platform yalnızca yasal ve eğitim amaçlı kullanılmalıdır. Kötüye kullanım, spam veya zararlı içerik yasaktır.</p>
+                <h3>Hesap Güvenliği</h3>
+                <p>Hesap bilgileriniz gizli tutulmalıdır. Hesabınızda gerçekleşen tüm aktivitelerden siz sorumlusunuz.</p>
+                <h3>Fikri Mülkiyet</h3>
+                <p>Platformdaki tüm içerik, tasarım ve kodlar Nexlands'e aittir. İzin almadan kopyalanamaz.</p>
+                <h3>Sorumluluk Sınırlama</h3>
+                <p>Platform "olduğu gibi" sunulur. Kullanım riski size aittir.</p>
+            `,
+            'cerez': `
+                <h2>Çerez Politikası</h2>
+                <p>Bu site çerezler (cookies) kullanmaktadır. Çerezler, tarayıcınızda depolanan küçük metin dosyalarıdır.</p>
+                <h3>Kullandığımız Çerezler</h3>
+                <ul>
+                    <li><strong>Zorunlu Çerezler:</strong> Oturum açık kalması için gereklidir.</li>
+                    <li><strong>Analitik Çerezler:</strong> Site kullanımını anlamamıza yardımcı olur.</li>
+                    <li><strong>İşlevsel Çerezler:</strong> Tercihlerinizi hatırlar.</li>
+                </ul>
+                <h3>Çerezleri Yönetme</h3>
+                <p>Tarayıcı ayarlarınızdan çerezleri devre dışı bırakabilirsiniz. Ancak bazı özellikler çalışmayabilir.</p>
+                <h3>Güncelleme</h3>
+                <p>Bu politika zaman zaman güncellenebilir. Son güncelleme: Nisan 2026</p>
+            `
+        };
+
+        function showLegalPage(page) {
+            document.getElementById('legalBody').innerHTML = legalContent[page] || '<p>İçerik bulunamadı.</p>';
+            document.getElementById('legalModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLegalModal() {
+            document.getElementById('legalModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+    </script>
+</body>
+</html>
