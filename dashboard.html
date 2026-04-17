@@ -464,12 +464,13 @@
 
     <script>
         // Check login
-        const userData = localStorage.getItem('nexlandsUser');
-        if (!userData || userData === 'undefined') {
-            window.location.href = '/';
+        const userDataStr = localStorage.getItem('nexlandsUser');
+        if (!userDataStr || userDataStr === 'undefined' || userDataStr === 'null') {
+            window.location.href = '/index.html';
         } else {
             try {
-                const user = JSON.parse(userData);
+                const user = JSON.parse(userDataStr);
+                if (!user || !user.email) throw new Error('Invalid user');
                 document.getElementById('userName').textContent = user.name || 'Kullanıcı';
                 
                 const avatar = document.getElementById('userAvatar');
