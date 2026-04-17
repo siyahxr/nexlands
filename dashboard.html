@@ -669,29 +669,14 @@
                                     <div class="msg-avatar" style="background: url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80') center/cover;"></div>
                                     <div class="msg-content">
                                         <div class="msg-author">Caner • 14:02</div>
-                                        <div class="msg-bubble">Merhaba millet! Yarınki Python quiz'ine hazır mısınız? Biraz da algoritma soracaklar galiba.</div>
-                                    </div>
-                                </div>
-                                <div class="msg">
-                                    <div class="msg-avatar" style="background: #8B5CF6;">Z</div>
-                                    <div class="msg-content">
-                                        <div class="msg-author">Zeynep • 14:05</div>
-                                        <div class="msg-bubble">Evet ben baya çalıştım. Binary search üzerinden gideceğim.</div>
-                                    </div>
-                                </div>
-                                <!-- User msg template -->
-                                <div class="msg me" style="display: none;" id="myDemoMsg">
-                                    <div class="msg-avatar" id="myChatAvatar">S</div>
-                                    <div class="msg-content">
-                                        <div class="msg-author">Sen • Şimdi</div>
-                                        <div class="msg-bubble" id="myDemoText">Harika, ben de hazırım!</div>
+                                        <div class="msg-bubble">Sistem mesajı: Sohbet odasına hoş geldiniz. İlk mesajı siz göndererek sohbeti başlatabilirsiniz!</div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="chat-input-area">
-                                <input type="text" id="chatInputArea" class="chat-input" placeholder="Yazılım Kulübü kanalına mesaj gönder..." onkeypress="if(event.key === 'Enter') sendMessage()">
-                                <button class="chat-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                                <input type="text" id="chatInputArea" class="chat-input" placeholder="Mesaj gönder..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                                <button class="chat-btn" id="btnSendChat" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
                             </div>
                         </div>
                     </div>
@@ -745,13 +730,13 @@
                         <div style="display:flex; flex-direction:column; gap: 16px;">
                             <div>
                                 <label style="display:block; font-size: 12px; color: var(--t3); margin-bottom:8px;">GÖRÜNEN AD</label>
-                                <input type="text" class="search-bar" style="width:100%;" placeholder="Adınız" disabled value="Kullanıcı Adı">
+                                <input type="text" id="editProfileName" class="search-bar" style="width:100%;" placeholder="Adınız" value="Kullanıcı Adı">
                             </div>
                             <div>
-                                <label style="display:block; font-size: 12px; color: var(--t3); margin-bottom:8px;">E-POSTA</label>
-                                <input type="text" class="search-bar" style="width:100%;" placeholder="E-posta" disabled value="Kullanıcı E-Postası" id="settingsEmail">
+                                <label style="display:block; font-size: 12px; color: var(--t3); margin-bottom:8px;">E-POSTA (Değiştirilemez)</label>
+                                <input type="text" class="search-bar" style="width:100%; opacity: 0.6;" disabled value="Kullanıcı E-Postası" id="settingsEmail">
                             </div>
-                            <button class="btn-game" style="margin-top: 16px;" onclick="showFeatureNotif('Profil Güncelleme')">Profili Güncelle</button>
+                            <button id="btnUpdateProfile" class="btn-game" style="margin-top: 16px;" onclick="updateProfile()">Profili Güncelle</button>
                         </div>
                     </div>
                 </div>
@@ -767,6 +752,8 @@
     </div>
 
     <script>
+        let activeUser = null;
+
         // Check Login and Hydrate UI
         const userDataStr = localStorage.getItem('nexlandsUser');
         if (!userDataStr || userDataStr === 'undefined' || userDataStr === 'null') {
@@ -774,6 +761,7 @@
         } else {
             try {
                 const user = JSON.parse(userDataStr);
+                activeUser = user;
                 
                 // Sidebar
                 document.getElementById('sidebarName').textContent = user.name || 'Öğrenci';
@@ -794,6 +782,7 @@
 
                 // Settings View hydration
                 document.getElementById('settingsName').textContent = user.name || 'Öğrenci';
+                document.getElementById('editProfileName').value = user.name || '';
                 document.getElementById('settingsEmail').value = user.email || 'Email Yok';
                 const setAvatar = document.getElementById('settingsAvatar');
                 if (user.avatar) {
@@ -818,27 +807,61 @@
         }
 
         function switchView(viewId, element) {
-            // Update nav active state
+            // ...existing switch logic...
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             if (element) {
                 element.classList.add('active');
             }
 
-            // Hide all views
             document.querySelectorAll('.view-section').forEach(view => {
                 view.classList.remove('active');
             });
 
-            // Show target view
             const target = document.getElementById('view-' + viewId);
             if (target) {
                 target.classList.add('active');
+                if(viewId === 'topluluk') {
+                    // Refresh chat list initially when switching to tab
+                    openChannel(currentChannel);
+                }
             }
             
-            // On mobile, close sidebar when clicking a link
             if (window.innerWidth <= 768) {
                 document.getElementById('sidebar').classList.remove('mobile-open');
             }
+        }
+
+        async function updateProfile() {
+            const btn = document.getElementById('btnUpdateProfile');
+            const newName = document.getElementById('editProfileName').value;
+            
+            if (!newName.trim()) return showFeatureNotif('İsim boş bırakılamaz!');
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kaydediliyor...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/profile', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: activeUser.email, originalEmail: activeUser.email, name: newName })
+                });
+                
+                const data = await res.json();
+                if (data.success) {
+                    activeUser = data.user;
+                    localStorage.setItem('nexlandsUser', JSON.stringify(activeUser));
+                    document.getElementById('settingsName').textContent = activeUser.name;
+                    document.getElementById('sidebarName').textContent = activeUser.name;
+                    showFeatureNotif('Profil güncellendi!');
+                } else {
+                    alert('Profil güncellenemedi: ' + data.error);
+                }
+            } catch (err) {
+                alert('Sistemsel bir hata oluştu');
+            }
+            btn.innerHTML = 'Profili Güncelle';
+            btn.disabled = false;
         }
 
         function startGame(name) {
@@ -850,49 +873,153 @@
         }
 
         /* Community Scripts */
+        let currentChannel = 'Yazılım Kulübü';
+        let chatInterval = null;
+
+        function openChannel(name, element = null) {
+            currentChannel = name;
+            document.getElementById('currentChatName').textContent = name;
+            document.getElementById('chatInputArea').placeholder = name + ' kanalına mesaj gönder...';
+            
+            if (element) {
+                document.querySelectorAll('.comm-item').forEach(el => el.classList.remove('active'));
+                element.classList.add('active');
+            }
+
+            loadMessages();
+            if(chatInterval) clearInterval(chatInterval);
+            chatInterval = setInterval(loadMessages, 5000); // Poll every 5s
+        }
+
+        async function loadMessages() {
+            try {
+                const res = await fetch('/api/chat?channel=' + encodeURIComponent(currentChannel));
+                if (!res.ok) return;
+                const data = await res.json();
+                if (data.success) {
+                    const msgsContainer = document.getElementById('chatMessages');
+                    msgsContainer.innerHTML = ''; // Clear
+
+                    if (data.messages.length === 0) {
+                        msgsContainer.innerHTML = '<div style="text-align:center; color:var(--t3); margin-top:20px;">İlk mesajı siz gönderin!</div>';
+                    }
+
+                    data.messages.forEach(m => {
+                        const isMe = m.authorEmail === activeUser.email;
+                        const date = new Date(m.timestamp);
+                        const timeStr = date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
+                        
+                        let avatarHtml = '';
+                        if (m.authorAvatar) {
+                            avatarHtml = `<div class="msg-avatar" style="background: url('${m.authorAvatar}') center/cover;"></div>`;
+                        } else {
+                            avatarHtml = `<div class="msg-avatar" style="background: ${isMe ? 'var(--grad-1)' : '#8B5CF6'}; color:#fff; display:grid; place-items:center;">${m.authorName[0].toUpperCase()}</div>`;
+                        }
+
+                        const msgDiv = document.createElement('div');
+                        msgDiv.className = 'msg ' + (isMe ? 'me' : '');
+                        msgDiv.innerHTML = `
+                            ${avatarHtml}
+                            <div class="msg-content">
+                                <div class="msg-author">${m.authorName} • ${timeStr}</div>
+                                <div class="msg-bubble">${escapeHtml(m.text)}</div>
+                            </div>
+                        `;
+                        msgsContainer.appendChild(msgDiv);
+                    });
+                    
+                    // Auto scroll
+                    msgsContainer.scrollTop = msgsContainer.scrollHeight;
+                }
+            } catch (err) {
+                console.error('Failed to load msgs', err);
+            }
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
         function createCommunity() {
             const name = prompt("Yeni Topluluk Adı:");
-            if (name) {
+            if (name && name.trim()) {
+                const cleanName = name.trim();
                 const list = document.getElementById('communityList');
                 const div = document.createElement('div');
                 div.className = 'comm-item';
+                div.onclick = function() { openChannel(cleanName, this); };
                 div.innerHTML = `
                     <div class="comm-icon" style="color: #A855F7; background: rgba(168,85,247,0.1);"><i class="fas fa-hashtag"></i></div>
                     <div class="comm-info">
-                        <div class="comm-name">${name}</div>
+                        <div class="comm-name">${cleanName}</div>
                         <div class="comm-users">1 Üye (Sen)</div>
                     </div>
                 `;
                 list.insertBefore(div, list.firstChild);
-                showFeatureNotif(name + ' Topluluğu Kuruldu');
+                showFeatureNotif(cleanName + ' Topluluğu Kuruldu');
+                openChannel(cleanName, div);
             }
         }
 
         function closeCommunity() {
             if (confirm('Bu topluluktan ayrılmak istediğinize emin misiniz?')) {
                 showFeatureNotif('Topluluktan ayrıldınız');
+                if (chatInterval) clearInterval(chatInterval);
                 document.getElementById('chatMessages').innerHTML = '<div style="text-align:center; color:var(--t3); margin-top:20px;">Menüden yeni bir topluluk seçin.</div>';
                 document.getElementById('currentChatName').textContent = 'Topluluk Seçin';
+                document.getElementById('chatInputArea').disabled = true;
             }
         }
 
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.getElementById('chatInputArea');
             const text = input.value.trim();
-            if(!text) return;
+            const btn = document.getElementById('btnSendChat');
             
-            const msgs = document.getElementById('chatMessages');
-            const template = document.getElementById('myDemoMsg').cloneNode(true);
+            if(!text || input.disabled || !activeUser) return;
             
-            template.style.display = 'flex';
-            template.id = '';
-            template.querySelector('#myDemoText').textContent = text;
-            template.querySelector('.msg-author').textContent = 'Sen • Şimdi';
-            
-            msgs.appendChild(template);
-            msgs.scrollTop = msgs.scrollHeight;
-            input.value = '';
+            input.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        channel: currentChannel,
+                        text: text,
+                        authorName: activeUser.name,
+                        authorEmail: activeUser.email,
+                        authorAvatar: activeUser.avatar
+                    })
+                });
+                
+                if (res.ok) {
+                    input.value = '';
+                    await loadMessages();
+                }
+            } catch (err) {
+                console.error(err);
+                showFeatureNotif('Mesaj gönderilemedi');
+            }
+
+            input.disabled = false;
+            input.focus();
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i>';
         }
+
+        // Initialize chats for existing static list elements
+        document.querySelectorAll('.comm-item').forEach(el => {
+            el.onclick = function() {
+                const cName = this.querySelector('.comm-name').textContent;
+                openChannel(cName, this);
+            };
+        });
 
         function logout() {
             if (confirm('Oturumu kapatmak istediğinize emin misiniz?')) {
