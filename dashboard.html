@@ -465,7 +465,7 @@
     <script>
         // Check login
         const userData = localStorage.getItem('nexlandsUser');
-        if (!userData) {
+        if (!userData || userData === 'undefined') {
             window.location.href = '/';
         } else {
             try {
