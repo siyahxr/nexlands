@@ -1062,8 +1062,17 @@
         // Window load listener (optional but good for hydration)
         window.addEventListener('load', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const view = urlParams.get('view');
-            const channel = urlParams.get('channel');
+            let view = urlParams.get('view');
+            let channel = urlParams.get('channel');
+            
+            // Check for clean semantic URL format (/topluluklar/CHANNEL)
+            if (window.location.pathname.startsWith('/topluluklar')) {
+                view = 'topluluk';
+                const pathParts = window.location.pathname.split('/');
+                if (pathParts.length > 2 && pathParts[2]) {
+                    channel = decodeURIComponent(pathParts[2]);
+                }
+            }
             
             if (view) {
                 // Find matching nav element to highlight

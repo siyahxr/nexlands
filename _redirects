@@ -1,1 +1,3 @@
 # Clear manual redirects to avoid loops with Cloudflare Pages internal routing
+/topluluklar/* /dashboard.html 200
+/topluluklar /dashboard.html 200

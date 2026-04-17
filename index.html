@@ -738,7 +738,7 @@
                 openAuthModal('login');
                 return;
             }
-            window.location.href = '/dashboard?view=topluluk&channel=' + encodeURIComponent(name);
+            window.open('/topluluklar/' + encodeURIComponent(name), '_blank');
         }
         
         function runCounters() {
