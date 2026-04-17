@@ -1036,7 +1036,7 @@
 
             loadMessages();
             if(chatInterval) clearInterval(chatInterval);
-            chatInterval = setInterval(loadMessages, 30); // GOD MODE: 30ms (Saniyede ~33 kontrol)
+            chatInterval = setInterval(loadMessages, 100); // Stabil Hız: 100ms (Anlık hissi korur)
         }
 
         async function loadMessages() {
@@ -1306,6 +1306,8 @@
         }
 
         function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('show');
+        }
 
         function logout() {
             if (confirm('Oturumu kapatmak istediğinize emin misiniz?')) {
