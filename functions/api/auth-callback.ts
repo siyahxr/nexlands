@@ -17,7 +17,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   }
 
   try {
-    const redirectUri = `${url.origin}/auth-callback`;
+    const redirectUri = `${url.origin}/auth-callback.html`;
     
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',

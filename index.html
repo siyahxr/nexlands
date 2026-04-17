@@ -761,7 +761,7 @@
             .then(data => {
                 if (data.success) {
                     localStorage.setItem('nexlandsUser', JSON.stringify(data.user));
-                    window.location.href = '/dashboard';
+                    window.location.href = '/dashboard.html';
                 } else {
                     alert('Hata: ' + (data.error || 'Giriş yapılamadı'));
                     btn.textContent = originalText;
@@ -802,7 +802,7 @@
                 if (data.success) {
                     localStorage.setItem('nexlandsUser', JSON.stringify(data.user));
                     alert('Kaydınız başarıyla oluşturuldu! Dashboard\'a yönlendiriliyorsunuz.');
-                    window.location.href = '/dashboard';
+                    window.location.href = '/dashboard.html';
                 } else {
                     alert('Kayıt başarısız: ' + (data.error || 'Bilinmeyen hata'));
                     btn.textContent = originalText;
@@ -820,8 +820,7 @@
         const GOOGLE_CLIENT_ID = '413655792875-lgl5ljlb7k2e8vo3f6kqmagd47jujgjv.apps.googleusercontent.com';
         
         function socialLogin(provider) {
-            const baseUrl = window.location.origin;
-            const redirectUri = window.location.origin + '/auth-callback';
+            const redirectUri = window.location.origin + '/auth-callback.html';
             
             const authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
                 'client_id=' + GOOGLE_CLIENT_ID + '&' +

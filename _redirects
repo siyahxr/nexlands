@@ -1,2 +1,1 @@
-/dashboard /dashboard.html 200
-/auth-callback /auth-callback.html 200
+# Clear manual redirects to avoid loops with Cloudflare Pages internal routing
