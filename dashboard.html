@@ -316,6 +316,39 @@
         .empty-state h3 { font-size: 20px; color: var(--t1); margin-bottom: 8px; }
         .empty-state p { color: var(--t2); font-size: 14px; margin-bottom: 24px; }
 
+        /* Community Chat UI */
+        .community-layout { display: flex; height: 75vh; background: var(--bg-sidebar); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; }
+        .community-sidebar { width: 300px; border-right: 1px solid var(--border); display: flex; flex-direction: column; background: rgba(0,0,0,0.2); }
+        .community-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .community-list { flex: 1; overflow-y: auto; padding: 12px; }
+        .comm-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; cursor: pointer; transition: 0.2s; margin-bottom: 4px; }
+        .comm-item:hover { background: var(--surface); }
+        .comm-item.active { background: var(--surface-hover); border: 1px solid var(--border-accent); }
+        .comm-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--surface); display: grid; place-items: center; font-size: 18px; color: var(--p); }
+        .comm-info { flex: 1; overflow: hidden; }
+        .comm-name { font-size: 14px; font-weight: 600; color: var(--t1); margin-bottom: 2px; }
+        .comm-users { font-size: 11px; color: var(--t3); }
+
+        .chat-area { flex: 1; display: flex; flex-direction: column; position: relative; }
+        .chat-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.01); }
+        .chat-header h3 { font-size: 16px; font-family: 'Inter', sans-serif; }
+        .chat-messages { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+        .msg { display: flex; gap: 12px; max-width: 80%; }
+        .msg.me { align-self: flex-end; flex-direction: row-reverse; max-width: 70%; }
+        .msg-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--grad-1); flex-shrink: 0; }
+        .msg-content { display: flex; flex-direction: column; gap: 4px; }
+        .msg.me .msg-content { align-items: flex-end; }
+        .msg-author { font-size: 11px; color: var(--t3); }
+        .msg-bubble { padding: 12px 16px; border-radius: 16px; font-size: 13px; line-height: 1.5; background: var(--surface); color: var(--t1); border: 1px solid var(--border); }
+        .msg.me .msg-bubble { background: var(--p); color: #FFF; border-color: transparent; border-bottom-right-radius: 4px; }
+        .msg:not(.me) .msg-bubble { border-bottom-left-radius: 4px; }
+        
+        .chat-input-area { padding: 20px; border-top: 1px solid var(--border); display: flex; gap: 12px; background: rgba(0,0,0,0.2); }
+        .chat-input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0 16px; color: var(--t1); outline: none; font-size: 13px; transition: 0.3s; }
+        .chat-input:focus { border-color: var(--p); }
+        .chat-btn { width: 44px; height: 44px; border-radius: 12px; background: var(--p); color: #FFF; border: none; cursor: pointer; display: grid; place-items: center; transition: 0.3s; }
+        .chat-btn:hover { background: var(--red); transform: scale(1.05); }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
@@ -346,6 +379,7 @@
                     <a href="#" class="nav-item" onclick="switchView('oyunlar', this)"><i class="fas fa-gamepad"></i> Oyunlar</a>
                     <a href="#" class="nav-item" onclick="switchView('siniflar', this)"><i class="fas fa-users"></i> Sınıflarım</a>
                     <a href="#" class="nav-item" onclick="switchView('analitik', this)"><i class="fas fa-chart-line"></i> Analizler</a>
+                    <a href="#" class="nav-item" onclick="switchView('topluluk', this)"><i class="fas fa-comments"></i> Topluluk</a>
                 </div>
 
                 <div class="nav-group">
@@ -578,6 +612,91 @@
                     </div>
                 </div>
 
+                <!-- TOPLULUK VIEW -->
+                <div id="view-topluluk" class="view-section">
+                    <div style="margin-bottom: 32px;">
+                        <h2 style="font-family:'Sora',sans-serif; font-size: 32px; margin-bottom: 8px;">Topluluk & Sohbet</h2>
+                        <p style="color: var(--t2);">İlgi alanına göre topluluklara katıl veya kendi kanalını oluştur.</p>
+                    </div>
+                    
+                    <div class="community-layout">
+                        <!-- Left Sidebar -->
+                        <div class="community-sidebar">
+                            <div class="community-header">
+                                <h3 style="font-size: 15px; font-weight: 600;">Kanallar</h3>
+                                <button onclick="createCommunity()" style="background:var(--surface); border:1px solid var(--border); color:var(--t1); border-radius:8px; width:32px; height:32px; cursor:pointer;"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="community-list" id="communityList">
+                                <div class="comm-item active">
+                                    <div class="comm-icon" style="color: #60A5FA; background: rgba(96,165,250,0.1);"><i class="fas fa-laptop-code"></i></div>
+                                    <div class="comm-info">
+                                        <div class="comm-name">Yazılım Kulübü</div>
+                                        <div class="comm-users">1.2k Üye</div>
+                                    </div>
+                                </div>
+                                <div class="comm-item">
+                                    <div class="comm-icon" style="color: #34D399; background: rgba(52,211,153,0.1);"><i class="fas fa-flask"></i></div>
+                                    <div class="comm-info">
+                                        <div class="comm-name">Bilim & Deney</div>
+                                        <div class="comm-users">850 Üye</div>
+                                    </div>
+                                </div>
+                                <div class="comm-item">
+                                    <div class="comm-icon" style="color: #FBBF24; background: rgba(251,191,36,0.1);"><i class="fas fa-history"></i></div>
+                                    <div class="comm-info">
+                                        <div class="comm-name">Tarih Tutkunları</div>
+                                        <div class="comm-users">540 Üye</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Chat Area -->
+                        <div class="chat-area" id="chatArea">
+                            <div class="chat-header">
+                                <div style="display:flex; align-items:center; gap:12px;">
+                                    <div class="comm-icon" style="width:36px; height:36px; color: #60A5FA; background: rgba(96,165,250,0.1);"><i class="fas fa-laptop-code"></i></div>
+                                    <div>
+                                        <h3 id="currentChatName">Yazılım Kulübü</h3>
+                                        <div style="font-size:11px; color:var(--t3);"><span style="display:inline-block; width:6px; height:6px; background:#22C55E; border-radius:50%; margin-right:4px;"></span>120 çevrimiçi</div>
+                                    </div>
+                                </div>
+                                <button onclick="closeCommunity()" style="background:transparent; border:1px solid var(--border); color:var(--p); padding:6px 12px; border-radius:8px; font-size:12px; cursor:pointer;" title="Topluluktan Ayrıl / Kapat">Ayrıl <i class="fas fa-sign-out-alt"></i></button>
+                            </div>
+                            
+                            <div class="chat-messages" id="chatMessages">
+                                <div class="msg">
+                                    <div class="msg-avatar" style="background: url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80') center/cover;"></div>
+                                    <div class="msg-content">
+                                        <div class="msg-author">Caner • 14:02</div>
+                                        <div class="msg-bubble">Merhaba millet! Yarınki Python quiz'ine hazır mısınız? Biraz da algoritma soracaklar galiba.</div>
+                                    </div>
+                                </div>
+                                <div class="msg">
+                                    <div class="msg-avatar" style="background: #8B5CF6;">Z</div>
+                                    <div class="msg-content">
+                                        <div class="msg-author">Zeynep • 14:05</div>
+                                        <div class="msg-bubble">Evet ben baya çalıştım. Binary search üzerinden gideceğim.</div>
+                                    </div>
+                                </div>
+                                <!-- User msg template -->
+                                <div class="msg me" style="display: none;" id="myDemoMsg">
+                                    <div class="msg-avatar" id="myChatAvatar">S</div>
+                                    <div class="msg-content">
+                                        <div class="msg-author">Sen • Şimdi</div>
+                                        <div class="msg-bubble" id="myDemoText">Harika, ben de hazırım!</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="chat-input-area">
+                                <input type="text" id="chatInputArea" class="chat-input" placeholder="Yazılım Kulübü kanalına mesaj gönder..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                                <button class="chat-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- EDITOR VIEW -->
                 <div id="view-editor" class="view-section">
                     <div style="margin-bottom: 32px;">
@@ -728,6 +847,51 @@
             msg.innerHTML = `🚀 <strong>${name}</strong> yükleniyor, hazır ol!`;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        /* Community Scripts */
+        function createCommunity() {
+            const name = prompt("Yeni Topluluk Adı:");
+            if (name) {
+                const list = document.getElementById('communityList');
+                const div = document.createElement('div');
+                div.className = 'comm-item';
+                div.innerHTML = `
+                    <div class="comm-icon" style="color: #A855F7; background: rgba(168,85,247,0.1);"><i class="fas fa-hashtag"></i></div>
+                    <div class="comm-info">
+                        <div class="comm-name">${name}</div>
+                        <div class="comm-users">1 Üye (Sen)</div>
+                    </div>
+                `;
+                list.insertBefore(div, list.firstChild);
+                showFeatureNotif(name + ' Topluluğu Kuruldu');
+            }
+        }
+
+        function closeCommunity() {
+            if (confirm('Bu topluluktan ayrılmak istediğinize emin misiniz?')) {
+                showFeatureNotif('Topluluktan ayrıldınız');
+                document.getElementById('chatMessages').innerHTML = '<div style="text-align:center; color:var(--t3); margin-top:20px;">Menüden yeni bir topluluk seçin.</div>';
+                document.getElementById('currentChatName').textContent = 'Topluluk Seçin';
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInputArea');
+            const text = input.value.trim();
+            if(!text) return;
+            
+            const msgs = document.getElementById('chatMessages');
+            const template = document.getElementById('myDemoMsg').cloneNode(true);
+            
+            template.style.display = 'flex';
+            template.id = '';
+            template.querySelector('#myDemoText').textContent = text;
+            template.querySelector('.msg-author').textContent = 'Sen • Şimdi';
+            
+            msgs.appendChild(template);
+            msgs.scrollTop = msgs.scrollHeight;
+            input.value = '';
         }
 
         function logout() {
