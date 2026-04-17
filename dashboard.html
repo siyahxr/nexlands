@@ -305,6 +305,52 @@
         .toast.show { transform: translateY(0); }
         .toast i { color: #22C55E; font-size: 20px; }
 
+        /* Modal Base */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            place-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .modal-overlay.show { display: grid; }
+        .modal-card {
+            background: var(--bg-sidebar);
+            border: 1px solid var(--border-accent);
+            border-radius: 32px;
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            position: relative;
+            text-align: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+        }
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            color: var(--t3);
+            cursor: pointer;
+            font-size: 20px;
+            transition: 0.3s;
+        }
+        .modal-close:hover { color: var(--p); }
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 30px;
+            background: var(--grad-1);
+            margin: 0 auto 24px;
+            display: grid;
+            place-items: center;
+            font-size: 40px;
+            font-weight: 800;
+            box-shadow: 0 20px 40px var(--p-glow);
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* View System */
@@ -378,6 +424,7 @@
                     <a href="#" class="nav-item active" onclick="switchView('dashboard', this)"><i class="fas fa-home"></i> Dashboard</a>
                     <a href="#" class="nav-item" onclick="switchView('oyunlar', this)"><i class="fas fa-gamepad"></i> Oyunlar</a>
                     <a href="#" class="nav-item" onclick="switchView('siniflar', this)"><i class="fas fa-users"></i> Sınıflarım</a>
+                    <a href="#" class="nav-item" onclick="switchView('arkadaslar', this)"><i class="fas fa-user-friends"></i> Arkadaşlar</a>
                     <a href="#" class="nav-item" onclick="switchView('analitik', this)"><i class="fas fa-chart-line"></i> Analizler</a>
                     <a href="#" class="nav-item" onclick="switchView('topluluk', this)"><i class="fas fa-comments"></i> Topluluk</a>
                 </div>
@@ -612,6 +659,35 @@
                     </div>
                 </div>
 
+                <!-- ARKADASLAR VIEW -->
+                <div id="view-arkadaslar" class="view-section">
+                    <div style="margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2 style="font-family:'Sora',sans-serif; font-size: 32px; margin-bottom: 8px;">Arkadaşlarım</h2>
+                            <p style="color: var(--t2);">Bağlantıda olduğun kişiler ve arkadaşlık isteklerin.</p>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
+                        <div class="friend-card" style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 16px;">
+                            <div style="width: 48px; height: 48px; border-radius: 14px; background: var(--grad-1); display: grid; place-items: center; font-weight: 700; font-size: 18px;">A</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Ahmet Yılmaz</div>
+                                <div style="font-size: 12px; color: #10B981;"><span style="display:inline-block; width:6px; height:6px; background:#10B981; border-radius:50%; margin-right:4px;"></span>Çevrimiçi</div>
+                            </div>
+                            <button class="btn-game" style="width: auto; height: 32px; font-size: 12px; padding: 0 12px;">Sohbet</button>
+                        </div>
+                        <div class="friend-card" style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 16px;">
+                            <div style="width: 48px; height: 48px; border-radius: 14px; background: #A855F7; display: grid; place-items: center; font-weight: 700; font-size: 18px;">E</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 600;">Elif Demir</div>
+                                <div style="font-size: 12px; color: var(--t3);">Son görülme: 2s önce</div>
+                            </div>
+                            <button class="btn-game" style="width: auto; height: 32px; font-size: 12px; padding: 0 12px;">Sohbet</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- TOPLULUK VIEW -->
                 <div id="view-topluluk" class="view-section">
                     <div style="margin-bottom: 32px;">
@@ -735,6 +811,16 @@
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
         <div id="toastMessage">İşlem başarılı!</div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal-card">
+            <div class="modal-close" onclick="closeProfileModal()"><i class="fas fa-times"></i></div>
+            <div id="profileModalContent">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
     </div>
 
     <script>
@@ -951,9 +1037,9 @@
                         
                         let avatarHtml = '';
                         if (m.authorAvatar) {
-                            avatarHtml = `<div class="msg-avatar" style="background: url('${m.authorAvatar}') center/cover;"></div>`;
+                            avatarHtml = `<div class="msg-avatar" style="background: url('${m.authorAvatar}') center/cover; cursor:pointer;" onclick="viewUserProfile('${m.authorEmail}', '${m.authorName.replace(/'/g, "\\'")}')"></div>`;
                         } else {
-                            avatarHtml = `<div class="msg-avatar" style="background: ${isMe ? 'var(--grad-1)' : '#8B5CF6'}; color:#fff; display:grid; place-items:center;">${m.authorName[0].toUpperCase()}</div>`;
+                            avatarHtml = `<div class="msg-avatar" style="background: ${isMe ? 'var(--grad-1)' : '#8B5CF6'}; color:#fff; display:grid; place-items:center; cursor:pointer;" onclick="viewUserProfile('${m.authorEmail}', '${m.authorName.replace(/'/g, "\\'")}')">${m.authorName[0].toUpperCase()}</div>`;
                         }
 
                         const msgDiv = document.createElement('div');
@@ -1090,6 +1176,39 @@
                 }
             }
         });
+
+        function viewUserProfile(email, name) {
+            const modal = document.getElementById('profileModal');
+            const content = document.getElementById('profileModalContent');
+            
+            const isMe = activeUser && email === activeUser.email;
+            
+            content.innerHTML = `
+                <div class="profile-avatar-large">${name[0].toUpperCase()}</div>
+                <h3 style="font-family:'Sora'; font-size: 24px; margin-bottom: 8px;">${name}</h3>
+                <p style="color: var(--t3); font-size: 14px; margin-bottom: 32px;">${email}</p>
+                
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    ${!isMe ? `
+                        <button class="btn-game" onclick="addFriend('${email}', '${name.replace(/'/g, "\\'")}')">
+                            <i class="fas fa-user-plus"></i> Arkadaş Ekle
+                        </button>
+                    ` : '<div style="color:var(--p); font-weight:600;">Bu senin profilin ✨</div>'}
+                    <button class="btn-game" style="background:var(--surface); border:1px solid var(--border);" onclick="closeProfileModal()">Kapat</button>
+                </div>
+            `;
+            
+            modal.classList.add('show');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.remove('show');
+        }
+
+        function addFriend(email, name) {
+            showFeatureNotif(`${name} kişisine arkadaşlık isteği gönderildi!`);
+            // In a real app, this would call /api/friends
+        }
 
         function logout() {
             if (confirm('Oturumu kapatmak istediğinize emin misiniz?')) {

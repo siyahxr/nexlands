@@ -728,6 +728,13 @@
         
         // Initializer
         window.addEventListener('load', () => {
+            // Persistent Login Check
+            const user = localStorage.getItem('nexlandsUser');
+            if (user && user !== 'undefined' && user !== 'null') {
+                window.location.href = '/dashboard';
+                return;
+            }
+
             loadHomeCommunities();
             // Start polling communities periodically
             setInterval(loadHomeCommunities, 10000); 
