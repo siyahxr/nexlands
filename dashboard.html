@@ -1036,7 +1036,7 @@
 
             loadMessages();
             if(chatInterval) clearInterval(chatInterval);
-            chatInterval = setInterval(loadMessages, 500); // 0.5 saniyede çek (Anlık hissi)
+            chatInterval = setInterval(loadMessages, 30); // GOD MODE: 30ms (Saniyede ~33 kontrol)
         }
 
         async function loadMessages() {
