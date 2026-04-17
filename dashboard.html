@@ -925,7 +925,7 @@
 
             loadMessages();
             if(chatInterval) clearInterval(chatInterval);
-            chatInterval = setInterval(loadMessages, 5000); // Poll every 5s
+            chatInterval = setInterval(loadMessages, 1000); // Saniyesinde çek
         }
 
         async function loadMessages() {

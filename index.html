@@ -526,6 +526,21 @@
         </div>
     </section>
 
+    <!-- Topluluklar Section -->
+    <section class="games-section" style="background: rgba(0,0,0,0.2);">
+        <div class="container">
+            <div class="section-head reveal">
+                <h2 class="section-title">Aktif Topluluklar</h2>
+                <p>Nexlands ekosistemindeki binlerce öğrencinin açtığı birbirinden renkli iletişim odalarını keşfet.</p>
+            </div>
+            
+            <div class="games-grid" id="homeCommunityGrid" style="justify-content: center; display: flex; flex-wrap: wrap; gap: 20px;">
+                <!-- Skeleton or loading state -->
+                <div style="color: var(--t3); text-align: center; width: 100%;"><i class="fas fa-spinner fa-spin"></i> Topluluklar yükleniyor...</div>
+            </div>
+        </div>
+    </section>
+
     <section class="stats-section">
         <div class="container">
             <div class="stats-grid reveal">
@@ -664,6 +679,49 @@
                 console.log('Stats API not available, using defaults');
             }
         }
+
+        async function loadHomeCommunities() {
+            try {
+                const res = await fetch('/api/channels');
+                if (!res.ok) return;
+                const data = await res.json();
+                if (data.success && window.homeCommunityGrid) {
+                    const grid = document.getElementById('homeCommunityGrid');
+                    grid.innerHTML = '';
+                    
+                    data.channels.slice(0, 12).forEach((ch, idx) => {
+                        const delay = (idx % 4) * 0.1;
+                        
+                        // We reuse the basic 'game-card' design just for convenience, or build a custom pill UI
+                        grid.innerHTML += `
+                            <div class="game-card reveal" style="min-width: 200px; flex: 1 1 200px; max-width: 300px; transition-delay: ${delay}s">
+                                <div style="display: flex; align-items: center; gap: 12px; padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px;">
+                                    <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.05); display:grid; place-items:center; color: ${ch.color || '#A855F7'}; font-size: 20px;">
+                                        <i class="fas ${ch.icon || 'fa-hashtag'}"></i>
+                                    </div>
+                                    <div style="flex:1;">
+                                        <h3 style="font-size: 16px; margin:0; color: var(--t1);">${ch.name}</h3>
+                                        <p style="font-size: 12px; color: var(--t3); margin: 4px 0 0;">Genel Sohbet</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    // Trigger reveal anim for new elements
+                    setTimeout(reveal, 100);
+                }
+            } catch (e) {
+                console.error("Home communities fail: ", e);
+            }
+        }
+        
+        // Initializer
+        window.addEventListener('DOMContentLoaded', () => {
+            loadHomeCommunities();
+            // Start polling communities periodically
+            setInterval(loadHomeCommunities, 10000); 
+        });
         
         function runCounters() {
             if (countersRun) return;
