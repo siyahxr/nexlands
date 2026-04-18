@@ -791,7 +791,7 @@
                 const data = await res.json();
                 if (data.success) {
                     localStorage.setItem('nexlandsUser', JSON.stringify(data.user));
-                    window.location.href = '/dashboard';
+                    window.location.replace('/dashboard');
                 } else {
                     alert(data.error || 'İşlem başarısız');
                     btn.disabled = false;

@@ -18,7 +18,7 @@
             
             if (error) {
                 alert('Google Hatası: ' + error);
-                window.location.href = '/?login=true';
+                window.location.replace('/?login=true');
                 return;
             }
             
@@ -32,19 +32,19 @@
                     
                     if (data.success && data.user) {
                         localStorage.setItem('nexlandsUser', JSON.stringify(data.user));
-                        window.location.href = '/dashboard';
+                        window.location.replace('/dashboard');
                     } else {
                         console.error('API Hatası:', data);
                         alert('Giriş başarısız: ' + (data.error || 'Bilinmeyen hata') + (data.details ? '\n\nDetay: ' + data.details : ''));
-                        window.location.href = '/?login=true';
+                        window.location.replace('/?login=true');
                     }
                 } catch (err) {
                     console.error('Fetch Hatası:', err);
                     alert('Sunucuya bağlanılamadı. Lütfen internetinizi kontrol edin.');
-                    window.location.href = '/?login=true';
+                    window.location.replace('/?login=true');
                 }
             } else {
-                window.location.href = '/';
+                window.location.replace('/');
             }
         }
         window.onload = handleCallback;

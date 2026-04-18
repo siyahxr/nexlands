@@ -1,4 +1,5 @@
-# Final Fix for Redirect Loops
-/topluluklar/* /dashboard.html 200
+# Definitive Fix for Redirect Loops
 /auth-callback /auth-callback.html 200
 /dashboard /dashboard.html 200
+/topluluklar /topluluklar.html 200
+/topluluklar/* /dashboard.html 200
