@@ -3,23 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Loading...</title>
+    <style>
+        body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; background: #050505; color: #fff; margin: 0; }
+        .loading-box { text-align: center; padding: 40px; border-radius: 20px; background: #0A0A0A; border: 1px solid rgba(255,255,255,0.05); }
+        .spinner { width: 40px; height: 40px; border: 3px solid rgba(220,38,38,0.2); border-top-color: #DC2626; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
     <script>
         async function handleCallback() {
+            const statusText = document.getElementById('statusText');
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
             const error = urlParams.get('error');
             
             if (error) {
-                alert('Giriş başarısız: ' + error);
-                window.location.href = '/';
+                alert('Google Hatası: ' + error);
+                window.location.href = '/?login=true';
                 return;
             }
             
             if (code) {
                 try {
+                    statusText.textContent = 'Hesabınız doğrulanıyor...';
                     const res = await fetch('/api/auth-callback?code=' + encodeURIComponent(code), {
-                        method: 'POST',
-                        credentials: 'include'
+                        method: 'POST'
                     });
                     const data = await res.json();
                     
@@ -27,20 +34,26 @@
                         localStorage.setItem('nexlandsUser', JSON.stringify(data.user));
                         window.location.href = '/dashboard';
                     } else {
-                        alert('Giriş başarısız: ' + (data.error || 'Bilinmeyen hata'));
-                        window.location.href = '/';
+                        console.error('API Hatası:', data);
+                        alert('Giriş başarısız: ' + (data.error || 'Bilinmeyen hata') + (data.details ? '\n\nDetay: ' + data.details : ''));
+                        window.location.href = '/?login=true';
                     }
                 } catch (err) {
-                    console.error(err);
-                    alert('Giriş işlenirken hata oluştu');
-                    window.location.href = '/';
+                    console.error('Fetch Hatası:', err);
+                    alert('Sunucuya bağlanılamadı. Lütfen internetinizi kontrol edin.');
+                    window.location.href = '/?login=true';
                 }
             } else {
                 window.location.href = '/';
             }
         }
-        handleCallback();
+        window.onload = handleCallback;
     </script>
 </head>
-<body></body>
+<body>
+    <div class="loading-box">
+        <div class="spinner"></div>
+        <div id="statusText">Oturum açılıyor...</div>
+    </div>
+</body>
 </html>

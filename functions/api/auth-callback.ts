@@ -16,6 +16,16 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     });
   }
 
+  if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
+      return new Response(JSON.stringify({ 
+          error: 'Cloudflare Secrets Eksik', 
+          details: 'GOOGLE_CLIENT_ID veya GOOGLE_CLIENT_SECRET tanımlanmamış. Lütfen Cloudflare Pages Dashboard > Settings > Environment Variables kısmından ekleyin.' 
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+  }
+
   try {
     const redirectUri = `${url.origin}/auth-callback`;
     

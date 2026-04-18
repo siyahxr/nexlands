@@ -390,13 +390,13 @@
                 <button class="auth-tab" onclick="switchAuth('register')">Hesap Oluştur</button>
             </div>
             
-            <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+            <form class="auth-form active" id="loginForm" onsubmit="handleAuth(event, 'login')">
                 <input type="email" name="email" class="auth-input" placeholder="E-posta adresi" required>
                 <input type="password" name="password" class="auth-input" placeholder="Şifre">
                 <button type="submit" class="auth-submit">Giriş Yap</button>
             </form>
             
-            <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+            <form class="auth-form" id="registerForm" onsubmit="handleAuth(event, 'register')">
                 <input type="text" name="name" class="auth-input" placeholder="Ad Soyad" required>
                 <input type="email" name="email" class="auth-input" placeholder="E-posta adresi" required>
                 <input type="password" name="password" class="auth-input" placeholder="Şifre" required minlength="6">
