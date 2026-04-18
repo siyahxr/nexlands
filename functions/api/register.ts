@@ -38,27 +38,39 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       });
     }
 
+    let username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+    const isUsernameTaken = await env.KV.get('username:' + username);
+    if (isUsernameTaken) {
+      username += Math.floor(Math.random() * 1000);
+    }
+    
     const user = {
       email,
       name,
-      password, // Note: In production hashing is mandatory
+      username,
+      password,
       provider: 'email',
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`,
       createdAt: new Date().toISOString(),
       loginTime: new Date().toISOString()
     };
     
-    await env.KV.put('user:' + email, JSON.stringify(user));
-    
-    // Efficiently increment stats
     const currentUsersRaw = await env.KV.get('stats:users');
-    const currentUsers = parseInt(currentUsersRaw || '50000');
-    await env.KV.put('stats:users', String(currentUsers + 1));
+    const currentUsers = parseInt(currentUsersRaw || '0');
+
+    await Promise.all([
+      env.KV.put('user:' + email, JSON.stringify(user)),
+      env.KV.put('username:' + username, email),
+      env.KV.put('stats:users', String(currentUsers + 1))
+    ]);
 
     return new Response(JSON.stringify({
       success: true,
       user: {
         email: user.email,
         name: user.name,
+        username: user.username,
+        avatar: user.avatar,
         provider: 'email'
       }
     }), {
@@ -66,7 +78,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Server error' }), {
+    return new Response(JSON.stringify({ error: 'Server error', details: error.message }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });

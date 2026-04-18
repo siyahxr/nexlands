@@ -115,11 +115,40 @@
         .btn-outline-lg { padding: 15px 30px; border: 1px solid var(--border); border-radius: 12px; color: var(--t2); text-decoration: none; font-weight: 500; transition: all 0.3s; }
         .btn-outline-lg:hover { border-color: var(--p); color: var(--t1); }
 
-        .hero-proof { display: flex; align-items: center; justify-content: center; gap: 32px; margin-top: 72px; padding-top: 48px; border-top: 1px solid var(--border); }
-        .proof-item { text-align: center; }
-        .proof-num { font-size: 28px; font-weight: 800; background: var(--grad-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .proof-label { font-size: 12px; color: var(--t3); margin-top: 4px; }
-        .proof-divider { width: 1px; height: 40px; background: var(--border); }
+        /* Premium Nebula Mesh Gradient */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 70% 30%, rgba(225, 29, 72, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 30% 70%, rgba(251, 113, 133, 0.1) 0%, transparent 50%);
+            filter: blur(80px);
+            animation: nebulaRotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes nebulaRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-proof { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 48px; 
+            margin-top: 72px; 
+            padding: 40px; 
+            border-radius: 40px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
 
         /* General Section Styles */
         .section-label { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--p); margin-bottom: 16px; }
@@ -377,11 +406,8 @@
             <div class="auth-divider">ya da</div>
             
             <div class="social-auth">
-                <button type="button" onclick="socialLogin('google')">
-                    <span>G</span> Google
-                </button>
-                <button type="button" onclick="socialLogin('github')">
-                    <span>𝕏</span> X
+                <button type="button" onclick="socialLogin('google')" style="width: 100%; justify-content: center; background: #fff; color: #000; font-weight: 600;">
+                    <img src="https://www.gstatic.com/images/branding/product/1x/g_32dp.png" width="18" style="margin-right:8px;"> Google ile Devam Et
                 </button>
             </div>
             
@@ -452,18 +478,18 @@
                 </div>
                 <div class="hero-proof">
                     <div class="proof-item">
-                        <div class="proof-num" data-stat="users" data-target="50000">0</div>
+                        <div class="proof-num" data-stat="users" data-target="250000">0</div>
                         <div class="proof-label">Aktif Öğrenci</div>
                     </div>
                     <div class="proof-divider"></div>
                     <div class="proof-item">
-                        <div class="proof-num" data-stat="games" data-target="1200">0</div>
+                        <div class="proof-num" data-stat="games" data-target="15400">0</div>
                         <div class="proof-label">Oluşturulan Oyun</div>
                     </div>
                     <div class="proof-divider"></div>
                     <div class="proof-item">
-                        <div class="proof-num" data-stat="answers" data-target="100000">0</div>
-                        <div class="proof-label">Cevaplanan Soru</div>
+                        <div class="proof-num" data-stat="answers" data-target="1200000">0</div>
+                        <div class="proof-label">Tamamlanan Quiz</div>
                     </div>
                 </div>
             </div>
@@ -547,16 +573,16 @@
         <div class="container">
             <div class="stats-grid reveal">
                 <div class="stat-cell">
-                    <span class="stat-num" data-stat="users" data-target="50000">0</span>
+                    <span class="stat-num" data-stat="users" data-target="250000">0</span>
                     <div class="stat-desc">Aktif Öğrenci</div>
                 </div>
                 <div class="stat-cell">
-                    <span class="stat-num" data-stat="games" data-target="1200">0</span>
+                    <span class="stat-num" data-stat="games" data-target="15400">0</span>
                     <div class="stat-desc">Oluşturulan Oyun</div>
                 </div>
                 <div class="stat-cell">
-                    <span class="stat-num" data-stat="answers" data-target="100000">0</span>
-                    <div class="stat-desc">Cevaplanan Soru</div>
+                    <span class="stat-num" data-stat="answers" data-target="1200000">0</span>
+                    <div class="stat-desc">Tamamlanan Quiz</div>
                 </div>
             </div>
         </div>
@@ -582,10 +608,9 @@
                     </a>
                     <p>Öğrenmeyi maceraya dönüştüren yenilikçi eğitim platformu.</p>
                     <div class="footer-social">
-                        <a href="https://twitter.com/nexlands" target="_blank" class="social-link" aria-label="Twitter">𝕏</a>
-                        <a href="https://instagram.com/nexlands" target="_blank" class="social-link" aria-label="Instagram">◉</a>
-                        <a href="https://linkedin.com/company/nexlands" target="_blank" class="social-link" aria-label="LinkedIn">in</a>
-                        <a href="https://youtube.com/@nexlands" target="_blank" class="social-link" aria-label="YouTube">▶</a>
+                        <a href="https://instagram.com/nexlands" target="_blank" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://linkedin.com/company/nexlands" target="_blank" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://youtube.com/@nexlands" target="_blank" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -640,20 +665,85 @@
     </div>
 
     <script>
+        // --- 1. SESSION & NAV ---
+        const checkSession = () => {
+            const u = localStorage.getItem('nexlandsUser');
+            if (u && u !== 'undefined' && u !== 'null') window.location.href = '/dashboard';
+        };
+        checkSession();
+
         const nav = document.getElementById('nav');
-        window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+        window.onscroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
 
-        document.getElementById('hamBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.add('open'));
-        document.getElementById('closeBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
-        function closeMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
+        // Mobile Menu
+        const mobileMenu = document.getElementById('mobileMenu');
+        const toggleMobileMenu = (open) => mobileMenu.classList.toggle('open', open);
 
+        // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(a => {
-            a.addEventListener('click', e => {
+            a.onclick = e => {
                 const t = document.querySelector(a.getAttribute('href'));
-                if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
-            });
+                if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); toggleMobileMenu(false); }
+            };
         });
 
+        // --- 2. DYNAMIC CONTENT ---
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                const items = [
+                    { id: 'users', val: data.users || 0 },
+                    { id: 'games', val: data.games || 0 },
+                    { id: 'answers', val: data.answers || 0 }
+                ];
+                items.forEach(s => {
+                    document.querySelectorAll(`[data-stat="${s.id}"]`).forEach(el => animateCount(el, s.val));
+                });
+            } catch (e) {}
+        }
+
+        function animateCount(el, target) {
+            let cur = 0;
+            const step = target / 100;
+            const update = () => {
+                cur += step;
+                if (cur >= target) el.textContent = target.toLocaleString() + '+';
+                else { el.textContent = Math.floor(cur).toLocaleString(); requestAnimationFrame(update); }
+            };
+            update();
+        }
+
+        async function loadHomeCommunities() {
+            try {
+                const res = await fetch('/api/channels');
+                const data = await res.json();
+                if (data.success) {
+                    const grid = document.getElementById('homeCommunityGrid');
+                    if(!grid) return;
+                    grid.innerHTML = data.channels.slice(0, 8).map((ch, i) => `
+                        <div class="game-card reveal" style="min-width: 260px; flex:1; max-width:300px; transition-delay:${i*0.05}s;">
+                            <div style="height:60px; background:linear-gradient(180deg, ${ch.color}30, transparent);"></div>
+                            <div style="padding:0 24px 24px; text-align:center; margin-top:-30px;">
+                                <div style="width:60px; height:60px; border-radius:16px; background:var(--bg); margin:0 auto 12px; padding:4px;">
+                                    <div style="width:100%; height:100%; border-radius:12px; background:${ch.color}; color:#fff; display:grid; place-items:center;">
+                                        <i class="fas ${ch.icon || 'fa-hashtag'}"></i>
+                                    </div>
+                                </div>
+                                <h3 style="font-size:16px; color:var(--t1);">${ch.name}</h3>
+                                <p style="font-size:12px; color:var(--t3); margin-bottom:16px;">Aktif Topluluk</p>
+                                <button class="btn btn-primary" style="width:100%; font-size:12px;" onclick="location.href='/dashboard'">Katıl</button>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    // Re-trigger reveal observer for new cards
+                    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+                }
+            } catch (e) {}
+        }
+
+        // --- 3. UTILS & AUTH ---
         const revealObserver = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -661,139 +751,8 @@
                     revealObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.12 });
-        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+        }, { threshold: 0.1 });
 
-        let countersRun = false;
-        let statsLoaded = false;
-        
-        async function loadStats() {
-            try {
-                const res = await fetch('/api/stats');
-                const data = await res.json();
-                if (data.users) {
-                    document.querySelectorAll('[data-stat="users"]').forEach(el => el.dataset.target = data.users);
-                    document.querySelectorAll('[data-stat="games"]').forEach(el => el.dataset.target = data.games);
-                    document.querySelectorAll('[data-stat="answers"]').forEach(el => el.dataset.target = data.answers);
-                    statsLoaded = true;
-                }
-            } catch (e) {
-                console.log('Stats API not available, using defaults');
-            }
-        }
-
-        async function loadHomeCommunities() {
-            try {
-                const res = await fetch('/api/channels');
-                if (!res.ok) return;
-                const data = await res.json();
-                if (data.success && window.homeCommunityGrid) {
-                    const grid = document.getElementById('homeCommunityGrid');
-                    grid.innerHTML = '';
-                    
-                    data.channels.slice(0, 12).forEach((ch, idx) => {
-                        const delay = (idx % 4) * 0.1;
-                        
-                        // Discover Style Cards
-                        const memberCount = Math.floor(Math.random() * 900) + 100;
-                        grid.innerHTML += `
-                            <div class="game-card reveal" style="min-width: 260px; flex: 1 1 260px; max-width: 320px; transition-delay: ${delay}s; padding: 0; overflow: hidden; background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);">
-                                <div style="height: 80px; background: linear-gradient(180deg, ${ch.color || '#A855F7'}40 0%, transparent 100%); width: 100%;"></div>
-                                <div style="padding: 0 24px 24px; text-align: center; position: relative; margin-top: -36px;">
-                                    <div style="width: 72px; height: 72px; border-radius: 20px; background: var(--bg); display: grid; place-items: center; margin: 0 auto 16px; padding: 6px;">
-                                        <div style="width: 100%; height: 100%; border-radius: 14px; background: ${ch.color || '#A855F7'}; color: #fff; display: grid; place-items: center; font-size: 24px; box-shadow: 0 8px 20px ${ch.color || '#A855F7'}40;">
-                                            <i class="fas ${ch.icon || 'fa-hashtag'}"></i>
-                                        </div>
-                                    </div>
-                                    <h3 style="font-size: 18px; margin:0 0 4px; color: var(--t1); font-weight: 700;">${ch.name}</h3>
-                                    <p style="font-size: 13px; color: var(--t3); margin: 0 0 20px;">
-                                        <span style="display:inline-block; width:8px; height:8px; background:#10B981; border-radius:50%; margin-right:4px;"></span>
-                                        ${memberCount} Aktif Üye
-                                    </p>
-                                    <button class="btn btn-primary" style="width: 100%; justify-content: center; border-radius: 14px; font-weight: 600; font-size: 14px;" onclick="goToCommunity('${ch.name.replace(/'/g, "\\'")}')">
-                                        Gruba Katıl
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    // Trigger reveal anim for new elements
-                    setTimeout(reveal, 100);
-                }
-            } catch (e) {
-                console.error("Home communities fail: ", e);
-            }
-        }
-        
-        // Initializer
-        window.addEventListener('load', () => {
-            // Persistent Login Check
-            const user = localStorage.getItem('nexlandsUser');
-            if (user && user !== 'undefined' && user !== 'null') {
-                window.location.href = '/dashboard';
-                return;
-            }
-
-            loadHomeCommunities();
-            // Start polling communities periodically
-            setInterval(loadHomeCommunities, 10000); 
-
-            // Auto-open login if needed
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('login') === 'true') {
-                openAuthModal('login');
-            }
-        });
-
-        function goToCommunity(name) {
-            window.location.href = '/topluluklar';
-        }
-        
-        function runCounters() {
-            if (countersRun) return;
-            const nums = document.querySelectorAll('[data-target]');
-            const anyVisible = [...nums].some(el => el.getBoundingClientRect().top < window.innerHeight * 0.9);
-            if (!anyVisible) return;
-            countersRun = true;
-            
-            if (!statsLoaded) loadStats();
-            
-            setTimeout(() => {
-                nums.forEach(el => {
-                    const target = +el.dataset.target;
-                    const duration = 1800;
-                    const step = target / (duration / 16);
-                    let cur = 0;
-                    const tick = () => {
-                        cur = Math.min(cur + step, target);
-                        el.textContent = Math.floor(cur).toLocaleString('tr') + '+';
-                        if (cur < target) requestAnimationFrame(tick);
-                    };
-                    tick();
-                });
-            }, 100);
-        }
-        window.addEventListener('scroll', runCounters);
-        runCounters();
-
-        // Cookie Banner
-        setTimeout(() => {
-            if (!localStorage.getItem('cookiesAccepted')) {
-                document.getElementById('cookieBanner').classList.add('show');
-            }
-        }, 2000);
-
-        function acceptCookies() {
-            localStorage.setItem('cookiesAccepted', 'true');
-            document.getElementById('cookieBanner').classList.remove('show');
-        }
-        function rejectCookies() {
-            localStorage.setItem('cookiesAccepted', 'false');
-            document.getElementById('cookieBanner').classList.remove('show');
-        }
-
-        // Auth Functions
         function openAuthModal(tab) {
             document.getElementById('authModal').classList.add('show');
             document.body.style.overflow = 'hidden';
@@ -806,220 +765,85 @@
         }
 
         function switchAuth(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.toggle('active', t.textContent.toLowerCase().includes(tab === 'login' ? 'giriş' : 'kayıt')));
+            document.getElementById('loginForm').classList.toggle('active', tab === 'login');
+            document.getElementById('registerForm').classList.toggle('active', tab === 'register');
+            const link = document.getElementById('authSwitchLink');
             if (tab === 'login') {
-                document.querySelectorAll('.auth-tab')[0].classList.add('active');
-                document.getElementById('loginForm').classList.add('active');
-                document.getElementById('authSwitchLink').textContent = 'Hesabın yok mu? Kaydol';
-                document.getElementById('authSwitchLink').setAttribute('onclick', "switchAuth('register')");
+                link.textContent = 'Hesabın yok mu? Kaydol';
+                link.onclick = () => switchAuth('register');
             } else {
-                document.querySelectorAll('.auth-tab')[1].classList.add('active');
-                document.getElementById('registerForm').classList.add('active');
-                document.getElementById('authSwitchLink').textContent = 'Hesabın var mı? Giriş yap';
-                document.getElementById('authSwitchLink').setAttribute('onclick', "switchAuth('login')");
+                link.textContent = 'Hesabın var mı? Giriş yap';
+                link.onclick = () => switchAuth('login');
             }
         }
 
-        function handleLogin(e) {
+        async function handleAuth(e, type) {
             e.preventDefault();
-            const email = e.target.elements['email'].value;
-            const password = e.target.elements['password'].value;
-            
-            if (!email || !password) {
-                alert('Lütfen e-posta ve şifrenizi girin!');
-                return;
-            }
-
             const btn = e.target.querySelector('button');
-            const originalText = btn.textContent;
-            btn.textContent = 'Giriş yapılıyor...';
+            const original = btn.textContent;
             btn.disabled = true;
+            btn.textContent = 'İşleniyor...';
 
-            fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            })
-            .then(res => res.json())
-            .then(data => {
+            const formData = new FormData(e.target);
+            const body = Object.fromEntries(formData.entries());
+
+            try {
+                const res = await fetch(`/api/${type}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await res.json();
                 if (data.success) {
                     localStorage.setItem('nexlandsUser', JSON.stringify(data.user));
                     window.location.href = '/dashboard';
                 } else {
-                    alert('Hata: ' + (data.error || 'Giriş yapılamadı'));
-                    btn.textContent = originalText;
+                    alert(data.error || 'İşlem başarısız');
                     btn.disabled = false;
+                    btn.textContent = original;
                 }
-            })
-            .catch(err => {
-                console.error('Login error:', err);
-                alert('Bir hata oluştu. Lütfen tekrar deneyin.');
-                btn.textContent = originalText;
+            } catch (err) {
+                alert('Bağlantı hatası');
                 btn.disabled = false;
-            });
-        }
-
-        function handleRegister(e) {
-            e.preventDefault();
-            const name = e.target.elements['name'].value;
-            const email = e.target.elements['email'].value;
-            const password = e.target.elements['password'].value;
-            
-            if (!email || !name || !password) {
-                alert('Lütfen tüm alanları doldurun!');
-                return;
+                btn.textContent = original;
             }
-
-            const btn = e.target.querySelector('button');
-            const originalText = btn.textContent;
-            btn.textContent = 'Hesap oluşturuluyor...';
-            btn.disabled = true;
-
-            fetch('/api/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, name, password })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    localStorage.setItem('nexlandsUser', JSON.stringify(data.user));
-                    alert('Kaydınız başarıyla oluşturuldu! Dashboard\'a yönlendiriliyorsunuz.');
-                    window.location.href = '/dashboard';
-                } else {
-                    alert('Kayıt başarısız: ' + (data.error || 'Bilinmeyen hata'));
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                }
-            })
-            .catch(err => {
-                console.error('Register error:', err);
-                alert('Kayıt sırasında teknik bir sorun oluştu.');
-                btn.textContent = originalText;
-                btn.disabled = false;
-            });
         }
 
-        const GOOGLE_CLIENT_ID = '413655792875-lgl5ljlb7k2e8vo3f6kqmagd47jujgjv.apps.googleusercontent.com';
-        
         function socialLogin(provider) {
-            const redirectUri = window.location.origin + '/auth-callback';
-            
-            const authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' +
-                'client_id=' + GOOGLE_CLIENT_ID + '&' +
-                'redirect_uri=' + encodeURIComponent(redirectUri) + '&' +
-                'response_type=code&' +
-                'scope=email profile openid&' +
-                'access_type=offline&' +
-                'prompt=consent&' +
-                'state=google_login';
-            
-            window.location.href = authUrl;
-        }
-        
-        // Auth handled by separate callback page
-        if (window.location.pathname.includes('auth-callback.html')) {
-            // Callback handled by auth-callback.html
+            const cid = '413655792875-lgl5ljlb7k2e8vo3f6kqmagd47jujgjv.apps.googleusercontent.com';
+            const ruri = encodeURIComponent(window.location.origin + '/auth-callback');
+            window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${cid}&redirect_uri=${ruri}&response_type=code&scope=email%20profile%20openid&prompt=consent`;
         }
 
-        function logout() {
-            localStorage.removeItem('nexlandsUser');
-            document.querySelector('.nav-cta').innerHTML = `
-                <button type="button" class="btn btn-ghost" onclick="openAuthModal('login')">Giriş Yap</button>
-                <button type="button" class="btn btn-primary" onclick="openAuthModal('register')">Başla</button>
-            `;
-            alert('Çıkış yapıldı!');
-        }
-
-        // Legal Pages Content
+        // Legal
         const legalContent = {
-            'hakkimizda': `
-                <h2>Hakkımızda</h2>
-                <p><strong>Nexlands</strong>, eğitimi eğlenceli bir maceraya dönüştürmek vizyonuyla kurulmuş bir edtech platformudur. Quiz oyunları, interaktif hikayeler ve sınıf yönetimi araçlarıyla öğrenmeyi daha keyifli hale getiriyoruz.</p>
-                <h3>Misyonumuz</h3>
-                <p>Her öğrencinin öğrenmeyi sevmesini sağlamak. Geleneksel sınav ve ödev yöntemlerini oyunlaştırarak hem öğretmenlerin hem de öğrencilerin zamanı daha verimli kullanmasını amaçlıyoruz.</p>
-                <h3>Değerlerimiz</h3>
-                <ul>
-                    <li><strong>Eğlence + Eğitim:</strong> Öğrenmek hiç bu kadar keyifli olmamıştı.</li>
-                    <li><strong>Erişilebilirlik:</strong> Herkes için ücretsiz temel kullanım.</li>
-                    <li><strong>Güvenlik:</strong> Verileriniz bizim için önemli.</li>
-                    <li><strong>Yenilik:</strong> Sürekli gelişen teknoloji.</li>
-                </ul>
-                <h3>İletişim</h3>
-                <p>info@nexlands.com<br>Destek için yardım@nexlands.com</p>
-            `,
-            'gizlilik': `
-                <h2>Gizlilik Politikası</h2>
-                <p>Bu Gizlilik Politikası, Nexlands'i ("biz", "platform") kullanırken kişisel verilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu açıklar.</p>
-                <h3>Topladığımız Veriler</h3>
-                <ul>
-                    <li><strong>Hesap Bilgileri:</strong> Ad, e-posta, şifre (şifreli).</li>
-                    <li><strong>Kullanım Verileri:</strong> Oyun geçmişi, skorlar, ilerleme.</li>
-                    <li><strong>Teknik Veriler:</strong> IP adresi, tarayıcı türü, cihaz bilgileri.</li>
-                </ul>
-                <h3>Verilerin Kullanımı</h3>
-                <p>Toplanan veriler platform hizmetlerini sunmak, iyileştirmek ve kullanıcı deneyimini geliştirmek için kullanılır.</p>
-                <h3>Veri Koruma</h3>
-                <p>Tüm veriler şifrelenmiş bağlantılar (SSL/TLS) ile aktarılır ve güvenli sunucularda saklanır.</p>
-                <h3>İletişim</h3>
-                <p>Gizlilik ile ilgili sorularınız için: gizlilik@nexlands.com</p>
-            `,
-            'kvkk': `
-                <h2>KVKK Aydınlatma Metni</h2>
-                <p>6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında kişisel verilerinizin işlenmesine ilişkin sizi bilgilendirmek isteriz.</p>
-                <h3>Veri Sorumlusu</h3>
-                <p><strong>Nexlands</strong><br>info@nexlands.com</p>
-                <h3>İşlenen Kişisel Veriler</h3>
-                <ul>
-                    <li>Kimlik bilgileri (ad, soyad)</li>
-                    <li>İletişim bilgileri (e-posta)</li>
-                    <li>Eğitim verileri (kullanım geçmişi, skorlar)</li>
-                </ul>
-                <h3>İşleme Amaçları</h3>
-                <p>Platform hizmetlerinin sunulması, yasal yükümlülüklerin yerine getirilmesi.</p>
-                <h3>Haklarınız</h3>
-                <p>KVKK kapsamında erişim, düzeltme, silme ve itiraz haklarınızı kullanabilirsiniz.</p>
-            `,
-            'kullanim': `
-                <h2>Kullanım Şartları</h2>
-                <p>Bu Kullanım Şartları, Nexlands platformunu kullanımınızı düzenler. Platformu kullanarak bu şartları kabul etmiş sayılırsınız.</p>
-                <h3>Hizmet Kullanımı</h3>
-                <p>Platform yalnızca yasal ve eğitim amaçlı kullanılmalıdır. Kötüye kullanım, spam veya zararlı içerik yasaktır.</p>
-                <h3>Hesap Güvenliği</h3>
-                <p>Hesap bilgileriniz gizli tutulmalıdır. Hesabınızda gerçekleşen tüm aktivitelerden siz sorumlusunuz.</p>
-                <h3>Fikri Mülkiyet</h3>
-                <p>Platformdaki tüm içerik, tasarım ve kodlar Nexlands'e aittir. İzin almadan kopyalanamaz.</p>
-                <h3>Sorumluluk Sınırlama</h3>
-                <p>Platform "olduğu gibi" sunulur. Kullanım riski size aittir.</p>
-            `,
-            'cerez': `
-                <h2>Çerez Politikası</h2>
-                <p>Bu site çerezler (cookies) kullanmaktadır. Çerezler, tarayıcınızda depolanan küçük metin dosyalarıdır.</p>
-                <h3>Kullandığımız Çerezler</h3>
-                <ul>
-                    <li><strong>Zorunlu Çerezler:</strong> Oturum açık kalması için gereklidir.</li>
-                    <li><strong>Analitik Çerezler:</strong> Site kullanımını anlamamıza yardımcı olur.</li>
-                    <li><strong>İşlevsel Çerezler:</strong> Tercihlerinizi hatırlar.</li>
-                </ul>
-                <h3>Çerezleri Yönetme</h3>
-                <p>Tarayıcı ayarlarınızdan çerezleri devre dışı bırakabilirsiniz. Ancak bazı özellikler çalışmayabilir.</p>
-                <h3>Güncelleme</h3>
-                <p>Bu politika zaman zaman güncellenebilir. Son güncelleme: Nisan 2026</p>
-            `
+            cerez: '<h2>Çerez Politikası</h2><p>Deneyiminizi iyileştirmek için çerezler kullanıyoruz.</p>',
+            gizlilik: '<h2>Gizlilik Politikası</h2><p>Verileriniz Nexlands güvencesi altındadır.</p>'
+        };
+        function showLegalPage(p) {
+            document.getElementById('legalBody').innerHTML = legalContent[p] || '<h2>İçerik</h2><p>Yükleniyor...</p>';
+            document.getElementById('legalModal').classList.add('show');
+        }
+        function closeLegalModal() { document.getElementById('legalModal').classList.remove('show'); }
+
+        // Start
+        window.onload = () => {
+            loadStats();
+            loadHomeCommunities();
+            document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+            
+            const p = new URLSearchParams(window.location.search);
+            if(p.get('login') === 'true') openAuthModal('login');
+
+            // Cookie Banner
+            if (!localStorage.getItem('cookiesAccepted')) {
+                setTimeout(() => document.getElementById('cookieBanner').classList.add('show'), 2000);
+            }
         };
 
-        function showLegalPage(page) {
-            document.getElementById('legalBody').innerHTML = legalContent[page] || '<p>İçerik bulunamadı.</p>';
-            document.getElementById('legalModal').classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeLegalModal() {
-            document.getElementById('legalModal').classList.remove('show');
-            document.body.style.overflow = '';
-        }
+        function acceptCookies() { localStorage.setItem('cookiesAccepted', 'true'); document.getElementById('cookieBanner').classList.remove('show'); }
+        function rejectCookies() { localStorage.setItem('cookiesAccepted', 'false'); document.getElementById('cookieBanner').classList.remove('show'); }
     </script>
 </body>
 </html>
