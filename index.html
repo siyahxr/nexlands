@@ -665,13 +665,7 @@
     </div>
 
     <script>
-        // --- 1. SESSION & NAV ---
-        const checkSession = () => {
-            const u = localStorage.getItem('nexlandsUser');
-            if (u && u !== 'undefined' && u !== 'null') window.location.href = '/dashboard';
-        };
-        checkSession();
-
+        // --- 1. NAV ---
         const nav = document.getElementById('nav');
         window.onscroll = () => nav.classList.toggle('scrolled', window.scrollY > 40);
 
